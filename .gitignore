@@ -1,5 +1,5 @@
 ##Project specific
-.tiled-session
+*.tiled-session
 
 ## Gradle:
 .gradle/
