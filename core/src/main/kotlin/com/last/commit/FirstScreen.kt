@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.utils.Json
+import com.last.commit.config.GameConfig
 import com.last.commit.map.TimeMap
 import kotlin.math.floor
 
@@ -24,16 +26,29 @@ class FirstScreen : Screen, InputProcessor {
 
     val batch = SpriteBatch()
     val camera = OrthographicCamera(800f, 600f)
-    val map:TimeMap = TimeMap("tiled/base.tmx")
+    lateinit var map: TimeMap // = TimeMap("tiled/base.tmx")
     val playerTexture = Texture("sprites/characters.png")
     val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43))
 
     override fun show() {
         // Prepare your screen here.
+
+        val gameConfig = this.loadGameConfig()
+        val randomMap = gameConfig.getRandomMap()
+        map = TimeMap(randomMap)
+
         this.spawnPlayer()
         this.updateCamera()
 
+
         Gdx.input.setInputProcessor(this)
+    }
+
+    fun loadGameConfig(): GameConfig {
+        val jsonFileHandle = Gdx.files.local("config.json")
+        val json = Json()
+
+        return json.fromJson(GameConfig::class.java, jsonFileHandle)
     }
 
     override fun render(delta: Float) {
@@ -178,6 +193,8 @@ class FirstScreen : Screen, InputProcessor {
     override fun keyTyped(character: Char): Boolean {
         if (character == 'e') {
             openDoor()
+        } else if (character == 't') {
+            map.teleport(player)
         }
         // TODO Auto-generated method stub
         return false

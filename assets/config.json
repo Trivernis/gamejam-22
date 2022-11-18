@@ -1,0 +1,6 @@
+{
+  "maps": [
+    "tiled/base.tmx",
+    "tiled/demo.tmx"
+  ]
+}

@@ -3,6 +3,7 @@ package com.last.commit.map
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -11,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.last.commit.Collidable
+import com.last.commit.Player
 import com.last.commit.Wall
 
 
@@ -20,7 +22,7 @@ class TimeMap(fileName: String) {
     private val walls: Array<Wall> = Array()
     val mapLoader:TmxMapLoader = TmxMapLoader()
     var mapRenderer: OrthogonalTiledMapRenderer
-    val map: TiledMap
+    var map: TiledMap
     var gridWidth = 0
     var gridHeight = 0
     var width = 0
@@ -36,6 +38,24 @@ class TimeMap(fileName: String) {
         mapRenderer = OrthogonalTiledMapRenderer(map)
         loadDimensions()
         loadWalls()
+    }
+
+    fun teleport(player: Player) {
+        val teleporters = map.layers["Teleporter"].objects
+        for (teleporter in teleporters) {
+            if (teleporter is RectangleMapObject) {
+                if (teleporter.rectangle.contains(player.getX(), player.getY())) {
+                    val targetMap = teleporter.properties.get("target", String::class.java)
+                    System.out.println("Teleporting to targetMap $targetMap")
+                    map = mapLoader.load("tiled/$targetMap")
+                    mapRenderer.map = map
+                    loadDimensions()
+                    loadWalls()
+                }
+            } else {
+                println("Found illegal teleporter. ${teleporter.properties.get("id")}")
+            }
+        }
     }
 
     fun getPlayerSpawn(): Vector2 {
@@ -69,6 +89,7 @@ class TimeMap(fileName: String) {
     }
 
     private fun loadWalls() {
+        walls.clear()
         val wallsLayer = map.layers["Walls"] as TiledMapTileLayer
         for (column in 0 until wallsLayer.width) {
             for (row in 0 until wallsLayer.height) {
