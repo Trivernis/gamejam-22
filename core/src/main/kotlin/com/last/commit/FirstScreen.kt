@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Json
 import com.last.commit.config.GameConfig
 import com.last.commit.map.TimeMap
+import com.last.commit.stages.InventoryStage
 import kotlin.math.floor
 
 
@@ -30,6 +31,8 @@ class FirstScreen : Screen, InputProcessor {
     val playerTexture = Texture("sprites/characters.png")
     val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43))
 
+    lateinit var inventoryStage: InventoryStage
+
     override fun show() {
         // Prepare your screen here.
 
@@ -40,6 +43,8 @@ class FirstScreen : Screen, InputProcessor {
         this.spawnPlayer()
         this.updateCamera()
 
+        player.addItemToInventory("genericItem_color_001.png")
+        inventoryStage = InventoryStage(player.inventory)
 
         Gdx.input.setInputProcessor(this)
     }
@@ -69,6 +74,8 @@ class FirstScreen : Screen, InputProcessor {
         this.map.render(batch, camera, delta)
         this.player.render(batch)
         batch.end()
+
+        inventoryStage.draw()
     }
 
     private fun getMousePosition(): Vector2 {
@@ -195,6 +202,8 @@ class FirstScreen : Screen, InputProcessor {
             openDoor()
         } else if (character == 't') {
             map.teleport(player)
+        } else if (character == 'i') {
+            inventoryStage.visible = !inventoryStage.visible
         }
         // TODO Auto-generated method stub
         return false

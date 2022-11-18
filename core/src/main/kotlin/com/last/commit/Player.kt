@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.last.commit.inventory.Inventory
 
 
 class Player(private val textureRegion: TextureRegion) : Collidable {
@@ -14,10 +15,16 @@ class Player(private val textureRegion: TextureRegion) : Collidable {
     private val movementSpeed = 200f
     private val interactionRange = 60f
 
+    val inventory = Inventory()
+
     init {
         val size = Math.max(textureRegion.regionWidth, textureRegion.regionHeight).toFloat()
         collider = Rectangle(0f, 0f, size, size)
         position = Vector2()
+    }
+
+    fun addItemToInventory(name: String) {
+        this.inventory.add(name)
     }
 
     fun getX(): Float {
