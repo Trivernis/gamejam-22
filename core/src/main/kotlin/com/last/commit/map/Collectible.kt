@@ -1,16 +1,21 @@
 package com.last.commit.map
 
 import com.badlogic.gdx.math.Rectangle
+import Position
 
-class Collectible(name: String, x: Float, y: Float, val gridX: Int, val gridY: Int, width: Float, height: Float) :
-    Interactable {
+class Collectible(
+        name: String,
+        val pos: Position,
+        width: Float,
+        height: Float
+) : Interactable {
 
     val name: String
     private val collider: Rectangle
 
     init {
         this.name = name
-        this.collider = Rectangle(x, y, width, height)
+        this.collider = Rectangle(pos.x, pos.y, width, height)
     }
 
     override fun interact(otherCollider: Rectangle) {

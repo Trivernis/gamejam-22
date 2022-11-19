@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array
 import com.last.commit.Collidable
 import com.last.commit.Player
 import com.last.commit.Wall
+import Position
 
 
 class TimeMap(fileName: String) {
@@ -124,6 +125,7 @@ class TimeMap(fileName: String) {
             return
         }
         val collectibleMapObjects = collectiableLayer.objects
+
         for (mapObject in collectibleMapObjects) {
             val mapObjectProperties = mapObject.properties
             val x = mapObjectProperties.get("x", Float::class.java)
@@ -132,9 +134,10 @@ class TimeMap(fileName: String) {
             val gridY = Math.round(y / mapTileHeight)
             val width = mapObjectProperties.get("width", Float::class.java)
             val height = mapObjectProperties.get("height", Float::class.java)
+
             if (mapObject is RectangleMapObject) {
                 val itemName = mapObjectProperties.get("item", String::class.java)
-                this.collectibles.add(Collectible(itemName, x, y, gridX, gridY, width, height))
+                this.collectibles.add(Collectible(itemName, Position(x, y, gridX, gridY), width, height))
             } else {
                 println("Found non-rectangular map object at ${x}-${y} skipping it")
             }
@@ -149,7 +152,7 @@ class TimeMap(fileName: String) {
             }
         }
         for (collectible in collectibles) {
-            if (collectible.gridX == gridX && collectible.gridY == gridY) {
+            if (collectible.pos.gridX == gridX && collectible.pos.gridY == gridY) {
                 return collectible
             }
         }
@@ -162,11 +165,10 @@ class TimeMap(fileName: String) {
         println("Interacting with element at $gridX:$gridY")
 
         //if no door is found return
-        val door: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
+        val interactable: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
         //else continue
 
-        door.interact(blockingCollider)
-
+        interactable.interact(blockingCollider)
     }
 
 
