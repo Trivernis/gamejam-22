@@ -51,7 +51,7 @@ class FirstScreen : Screen, InputProcessor {
 
         player.addItemToInventory("drill")
         inventoryStage = InventoryStage(player.inventory)
-        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.setAutoShapeType(true)
 
         Gdx.input.setInputProcessor(this)
     }
@@ -75,7 +75,7 @@ class FirstScreen : Screen, InputProcessor {
 
         val mousePosition: Vector2 = getMousePosition()
         player.lookAt(mousePosition)
-        var interactables = map.getInteractablesAt(
+        val interactables = map.getInteractablesAt(
             player.getAbsoluteDirection()
         )
 
@@ -94,11 +94,11 @@ class FirstScreen : Screen, InputProcessor {
     }
 
     fun renderInteractables(interactables: List<Interactable>) {
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.setProjectionMatrix(this.camera.combined);
-        shapeRenderer.setColor(highlightColor);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        Gdx.gl.glEnable(GL20.GL_BLEND)
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
+        shapeRenderer.setProjectionMatrix(this.camera.combined)
+        shapeRenderer.setColor(highlightColor)
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
         for (interactable in interactables) {
             shapeRenderer.rect(
                 interactable.getCollider().x,
@@ -108,7 +108,7 @@ class FirstScreen : Screen, InputProcessor {
             )
         }
         shapeRenderer.end()
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        Gdx.gl.glDisable(GL20.GL_BLEND)
     }
 
     private fun getMousePosition(): Vector2 {
@@ -164,7 +164,7 @@ class FirstScreen : Screen, InputProcessor {
     }
 
     private fun checkCollision() {
-        this.isColliding = map.isCollidingWithWall(player)
+        this.isColliding = map.isCollidingWith(player)
     }
 
     fun updateCamera() {

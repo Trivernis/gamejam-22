@@ -20,6 +20,7 @@ class TimeMap(fileName: String) {
     private val CELL_SIZE = 64
 
     private val walls = Array<Wall>()
+    private val doors = Array<Door>()
     private val collectibles = Array<Collectible>()
     val mapLoader: TmxMapLoader = TmxMapLoader()
     var mapRenderer: OrthogonalTiledMapRenderer
@@ -93,6 +94,7 @@ class TimeMap(fileName: String) {
 
     private fun loadWalls() {
         walls.clear()
+        doors.clear()
         val wallsLayer = map.layers["Walls"] as TiledMapTileLayer
         for (column in 0 until wallsLayer.width) {
             for (row in 0 until wallsLayer.height) {
@@ -104,13 +106,11 @@ class TimeMap(fileName: String) {
                         row.toFloat() * wallsLayer.tileHeight, wallsLayer.tileWidth.toFloat(),
                         wallsLayer.tileHeight.toFloat()
                     )
-                    val wall: Wall
                     if (java.lang.Boolean.TRUE == isDoor) {
-                        wall = Door(column, row, wallCollider, cell)
+                        doors.add(Door(column, row, wallCollider, cell))
                     } else {
-                        wall = Wall(column, row, wallCollider, cell)
+                        walls.add(Wall(column, row, wallCollider, cell))
                     }
-                    walls.add(wall)
                 }
             }
         }
@@ -141,9 +141,9 @@ class TimeMap(fileName: String) {
     }
 
     private fun findDoorByGridPosition(gridX: Int, gridY: Int): Door? {
-        for (wall in walls) {
-            if (wall.gridX == gridX && wall.gridY == gridY && wall is Door) {
-                return wall
+        for (door in doors) {
+            if (door.gridX == gridX && door.gridY == gridY && door is Door) {
+                return door
             }
         }
         return null
@@ -180,9 +180,15 @@ class TimeMap(fileName: String) {
         mapRenderer.render()
     }
 
-    fun isCollidingWithWall(collidable: Collidable): Boolean {
+    fun isCollidingWith(collidable: Collidable): Boolean {
+
         for (wall in walls) {
             if (wall.collidesWidth(collidable)) {
+                return true
+            }
+        }
+        for (door in doors) {
+            if (door.collidesWidth(collidable)) {
                 return true
             }
         }
@@ -193,8 +199,8 @@ class TimeMap(fileName: String) {
         val interactables = ArrayList<Interactable>()
         val c = collectibles.filter { it.getCollider().contains(absoluteDirection) }
         interactables.addAll(c)
-        val w = walls.filter { it.getCollider().contains(absoluteDirection) }
-//        interactables.addAll(w)
+        val w = doors.filter { it.getCollider().contains(absoluteDirection) }
+        interactables.addAll(w)
 
         return interactables
     }
