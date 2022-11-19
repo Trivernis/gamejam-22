@@ -155,7 +155,9 @@ class TimeMap(fileName: String, val state: GameState) {
 
             if (mapObject is RectangleMapObject) {
                 val itemName = mapObjectProperties.get("item", String::class.java)
-                this.collectibles.add(Collectible(itemName, Position(x, y, gridX, gridY), width, height))
+                itemName?. let {
+                    this.collectibles.add(Collectible(itemName, Position(x, y, gridX, gridY), width, height))
+                }
             } else {
                 println("Found non-rectangular map object at ${x}-${y} skipping it")
             }
