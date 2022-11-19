@@ -21,7 +21,6 @@ public class SoundEngine {
             val music = loadMusic(gameSound.name)
             music.stop()
             music.volume = volume
-            music.setLooping(true)
             music.play()
         }
     }
