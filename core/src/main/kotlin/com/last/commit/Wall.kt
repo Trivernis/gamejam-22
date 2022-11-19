@@ -3,14 +3,7 @@ package com.last.commit
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.math.Rectangle
 
-open class Wall(var gridX: Int, var gridY: Int, wallCollider: Rectangle, cell: Cell) : Collidable {
-    var wallCollider: Rectangle
-    var cell: Cell
-
-    init {
-        this.wallCollider = wallCollider
-        this.cell = cell
-    }
+open class Wall(var gridX: Int, var gridY: Int, var wallCollider: Rectangle, var cell: Cell) : Collidable {
 
     override fun getCollider(): Rectangle {
         return wallCollider

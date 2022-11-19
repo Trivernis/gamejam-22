@@ -2,12 +2,6 @@ package com.last.commit.inventory
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 
-class InventoryItem(name: String, texture: TextureRegion) {
-    val texture: TextureRegion
-    val name: String
+class InventoryItem(val name: String, val texture: TextureRegion) {
 
-    init {
-        this.name = name
-        this.texture = texture
-    }
 }
