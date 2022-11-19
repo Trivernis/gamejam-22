@@ -1,4 +1,4 @@
-package com.last.commit
+package com.last.commit.screen
 
 import GameState
 import com.badlogic.gdx.Gdx
@@ -16,12 +16,13 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Json
+import com.last.commit.ColorState
+import com.last.commit.Player
 import com.last.commit.config.ActionCommand
 import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
 import com.last.commit.stages.InventoryStage
-import com.last.commit.audio.GameSoundEffect
 import com.last.commit.audio.GameMusic
 import kotlin.math.floor
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game
 import com.last.commit.config.GameSettings
 import com.last.commit.inventory.Inventory
 import com.last.commit.audio.SoundEngine
+import com.last.commit.screen.FirstScreen
 
 /** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms.  */
 class Game : Game() {
