@@ -3,6 +3,8 @@ package com.last.commit.map
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -11,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.last.commit.Collidable
 import com.last.commit.Player
 import com.last.commit.Wall
@@ -19,7 +22,7 @@ import Position
 import GameState
 
 
-class TimeMap(fileName: String, val state: GameState) {
+class TimeMap(fileName: String, val state: GameState): Actor() {
     private val CELL_SIZE = 64
 
     private val walls = Array<Wall>()
@@ -51,7 +54,7 @@ class TimeMap(fileName: String, val state: GameState) {
         for (teleporter in teleporters) {
             if (teleporter is RectangleMapObject) {
                 if (teleporter.rectangle.contains(player.getX(), player.getY())) {
-                    state.soundEngine.play(GameSoundEffect.TIME_TRAVEL)
+                    state.soundEngine.play(GameSoundEffect.TIME_TRAVEL, 0.5f)
                     val targetMap = teleporter.properties.get("target", String::class.java)
                     System.out.println("Teleporting to targetMap $targetMap")
                     map = mapLoader.load("tiled/$targetMap")
@@ -183,14 +186,13 @@ class TimeMap(fileName: String, val state: GameState) {
     fun getTileHeight(): Float {
         return mapTileHeight.toFloat()
     }
-
-    fun render(batch: SpriteBatch, camera: OrthographicCamera, delta: Float) {
-        mapRenderer.setView(camera)
+    
+    override fun draw(batch: Batch, parentAlpha: Float) {
+        mapRenderer.setView(batch.projectionMatrix, x, y, width.toFloat(), height.toFloat())
         mapRenderer.render()
     }
 
     fun isCollidingWith(collidable: Collidable): Boolean {
-
         for (wall in walls) {
             if (wall.collidesWidth(collidable)) {
                 return true

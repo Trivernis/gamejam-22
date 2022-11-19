@@ -2,23 +2,24 @@ package com.last.commit.stages
 
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.last.commit.inventory.Inventory
 import com.last.commit.inventory.InventoryItemTextureLoader
 
-class InventoryStage(path: String, val inventory: Inventory) : Stage() {
+class InventoryStage(path: String, val inventory: Inventory) : Stage(FitViewport(1200f, 1200f)) {
     val textureLoader = InventoryItemTextureLoader(path)
-    
+    var images: List<Image> = ArrayList()
+    val batch = SpriteBatch()
+
     init {
         textureLoader.parse()
+        this.refresh()
+        this.setDebugAll(true)
     }
-
-    var visible = false
-        set(visible) {
-            field = visible
-            if (visible) {
-                refresh()
-            }
-        }
 
     fun refresh() {
         super.clear()
@@ -33,15 +34,15 @@ class InventoryStage(path: String, val inventory: Inventory) : Stage() {
     }
 
     fun resize(width: Int, height: Int) {
-        viewport.update(width, height, true)
+        this.viewport.update(width, height, true)
+    }
+    
+    override fun act() {
+        this.refresh()
+        super.act()
     }
 
     override fun draw() {
-        if (inventory.updated) {
-            this.refresh()
-        }
-        if (visible) {
-            super.draw()
-        }
+        super.draw()
     }
 }

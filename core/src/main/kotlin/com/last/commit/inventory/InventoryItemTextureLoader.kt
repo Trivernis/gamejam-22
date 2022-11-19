@@ -17,6 +17,7 @@ class InventoryItemTextureLoader(path: String) {
     init {
         itemsSpriteSheet = Texture("${path}.png")
         textureMapping = Gdx.files.local("${path}.xml")
+        this.parse()
     }
 
     fun getTexture(itemName: String): TextureRegion {

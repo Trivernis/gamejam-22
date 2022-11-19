@@ -2,14 +2,18 @@ package com.last.commit
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.last.commit.inventory.Inventory
 import com.last.commit.audio.GameSoundEffect
 import GameState
 
 
-class Player(private val textureRegion: TextureRegion, private val gameState: GameState) : Collidable {
+class Player(private val textureRegion: TextureRegion, private val gameState: GameState) : Collidable, Actor() {
 
     private var collider: Rectangle = Rectangle(0f, 0f, 0f, 0f)
     var position: Vector2 = Vector2.Zero
@@ -17,22 +21,23 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
     private val movementSpeed = 200f
     private val interactionRange = 60f
     private var lastStep = 0L
+    val batch = SpriteBatch()
+    val renderer = ShapeRenderer()
 
     init {
         val size = Math.max(textureRegion.regionWidth, textureRegion.regionHeight).toFloat()
         collider = Rectangle(0f, 0f, size, size)
-        position = Vector2()
     }
 
     fun addItemToInventory(name: String) {
         gameState.inventory.add(name)
     }
 
-    fun getX(): Float {
+    override fun getX(): Float {
         return position.x
     }
 
-    fun getY(): Float {
+    override fun getY(): Float {
         return position.y
     }
 
@@ -61,15 +66,15 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
         return collider
     }
 
-    fun setPosition(x: Float, y: Float) {
+    override fun setPosition(x: Float, y: Float) {
         position[x] = y
     }
 
-    fun getWidth(): Float {
+    override fun getWidth(): Float {
         return collider.getWidth()
     }
 
-    fun getHeight(): Float {
+    override fun getHeight(): Float {
         return collider.getHeight()
     }
 
@@ -105,22 +110,24 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
 
 
     private fun getHalfPlayerWidth(): Float {
-        return getWidth() / 2
+        return getWidth()/ 2
     }
 
     private fun getHalfPlayerHeight(): Float {
         return getHeight() / 2
     }
 
-    fun getRotation(): Float {
+    override fun getRotation(): Float {
         return direction.angleDeg()
     }
-
-    fun render(batch: SpriteBatch) {
+    
+    override fun draw(batch: Batch, parentAlpha: Float) {
         val halfPlayerWidth: Float = getHalfPlayerWidth() // TODO maybe use collider
         // dimensions
         val halfPlayerHeight: Float = getHalfPlayerHeight() // TODO maybe use collider
         // dimensions
+        
+        
         batch.draw(
             textureRegion, getX(), getY(),
             halfPlayerWidth, halfPlayerHeight, getWidth(),

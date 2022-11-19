@@ -21,47 +21,27 @@ import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
 import com.last.commit.stages.InventoryStage
+import com.last.commit.stages.WorldStage
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.audio.GameMusic
 import kotlin.math.floor
 
 /** First screen of the application. Displayed after the application is created. */
 class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
-
-    val viewportSize = 800f
-
-    private var delta = 0f
-    private var isColliding = false
     val state = ColorState()
 
-    val batch = SpriteBatch()
-    val camera = OrthographicCamera(viewportSize, viewportSize)
-    lateinit var map: TimeMap // = TimeMap("tiled/base.tmx")
-    val playerTexture = Texture("sprites/characters.png")
-    val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43), gameState)
-    var shapeRenderer = ShapeRenderer()
-
-    val highlightColor = Color(0f, 0f, 1f, 0.5f)
-
     lateinit var inventoryStage: InventoryStage
+    lateinit var worldStage: WorldStage
 
     override fun show() {
         // Prepare your screen here.
 
-        val gameConfig = this.loadGameConfig()
-        val randomMap = gameConfig.getRandomMap()
-        map = TimeMap(randomMap, gameState)
-        handleRatioChange()
-
-        this.spawnPlayer()
-        this.updateCamera()
-
-        player.addItemToInventory("drill")
         inventoryStage = InventoryStage("sprites/genericItems_spritesheet_colored", gameState.inventory)
-        shapeRenderer.setAutoShapeType(true)
+        worldStage = WorldStage(1200f, 1200f, gameState)
+        inventoryStage.viewport.setCamera(worldStage.camera)
 
         Gdx.input.setInputProcessor(this)
-        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
+        // gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
     }
 
     fun loadGameConfig(): GameConfig {
@@ -72,157 +52,21 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
     }
 
     override fun render(delta: Float) {
-        this.delta = delta
         //        state.step((delta * 1000).toLong())
         // Draw your screen here. "delta" is the time since last render in seconds.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         Gdx.gl.glClearColor(state.red, state.green, state.blue, 1f)
 
-        handleInput()
-        handleMapBorderCollision()
-
-        val mousePosition: Vector2 = getMousePosition()
-        player.lookAt(mousePosition)
-        val interactables = map.getInteractablesAt(player.getAbsoluteDirection())
-
-        batch.projectionMatrix = camera.combined
-        batch.begin()
-        this.map.render(batch, camera, delta)
-        this.player.render(batch)
-        batch.end()
-
-        // TODO: auslagern in sperate Methode
-        renderInteractables(interactables)
-
+        worldStage.act(delta)
+        worldStage.draw()
+        inventoryStage.act(delta)
         inventoryStage.draw()
     }
-
-    fun renderInteractables(interactables: List<Interactable>) {
-        Gdx.gl.glEnable(GL20.GL_BLEND)
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
-        shapeRenderer.setProjectionMatrix(this.camera.combined)
-        shapeRenderer.setColor(highlightColor)
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
-        for (interactable in interactables) {
-            shapeRenderer.rect(
-                    interactable.getCollider().x,
-                    interactable.getCollider().y,
-                    interactable.getCollider().width,
-                    interactable.getCollider().height
-            )
-        }
-        shapeRenderer.end()
-        Gdx.gl.glDisable(GL20.GL_BLEND)
-    }
-
-    private fun getMousePosition(): Vector2 {
-        val unprojectedMousePosition =
-                camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
-        return Vector2(unprojectedMousePosition.x, unprojectedMousePosition.y)
-    }
-
-    private fun handleMapBorderCollision() {
-        val mapWidth: Int = map.width
-        val mapHeight: Int = map.height
-        val playerSize: Float = player.getSize()
-        val playerX: Float = MathUtils.clamp(this.player.getX(), 0f, mapWidth - playerSize)
-        val playerY: Float = MathUtils.clamp(this.player.getY(), 0f, mapHeight - playerSize)
-        this.player.setPosition(playerX, playerY)
-    }
-
-    private fun handleInput() {
-        val horizontalMovement = Vector2()
-        if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)) {
-            horizontalMovement.sub(Vector2.X)
-        }
-        if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            horizontalMovement.add(Vector2.X)
-        }
-        this.player.move(horizontalMovement, delta)
-        checkCollision()
-        if (this.isColliding) {
-            horizontalMovement.rotateDeg(180f)
-            this.player.move(horizontalMovement, delta)
-        }
-        val verticalMovement = Vector2()
-        if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
-            verticalMovement.add(Vector2.Y)
-        }
-        if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
-            verticalMovement.sub(Vector2.Y)
-        }
-        this.player.move(verticalMovement, delta)
-        checkCollision()
-        if (this.isColliding) {
-            verticalMovement.rotateDeg(180f)
-            this.player.move(verticalMovement, delta)
-        }
-        val hasMoved = !horizontalMovement.isZero || !verticalMovement.isZero
-        if (hasMoved) {
-            updateCamera()
-        }
-    }
-
-    private fun spawnPlayer() {
-        val playerSpawn: Vector2 = map.getPlayerSpawn()
-        this.player.position = playerSpawn
-    }
-
-    private fun checkCollision() {
-        this.isColliding = map.isCollidingWith(player)
-    }
-
-    fun updateCamera() {
-        val cX: Float
-        val cY: Float
-
-        val halfScreenWidth = camera.viewportWidth / 2
-        val halfScreenHeight = camera.viewportHeight / 2
-        val playerXPosition: Float = this.player.getX()
-        val playerYPosition: Float = this.player.getY()
-        val mapWidth: Int = map.width
-        val mapHeight: Int = map.height
-
-        cX = if (playerXPosition < halfScreenWidth) {
-                halfScreenWidth
-            } else if (playerXPosition > mapWidth - halfScreenWidth) {
-                mapWidth - halfScreenWidth
-            } else {
-                playerXPosition
-            }
-
-        cY = if (playerYPosition < halfScreenHeight) {
-                halfScreenHeight
-            } else if (playerYPosition > mapHeight - halfScreenHeight) {
-                mapHeight - halfScreenHeight
-            } else {
-                playerYPosition
-            }
-
-        camera.position[cX, cY] = 0f
-        camera.update()
-    }
-
+    
     override fun resize(width: Int, height: Int) {
         // Resize your screen here. The parameters represent the new window size.
         inventoryStage.resize(width, height)
-        handleRatioChange()
-    }
-
-    fun handleRatioChange() {
-        val height = Gdx.graphics.height
-        val width = Gdx.graphics.width
-
-        val wRatio = width.toFloat() / height.toFloat()
-        val hRatio = height.toFloat() / width.toFloat()
-        if (wRatio < 1) {
-            camera.viewportWidth = viewportSize * wRatio
-            camera.viewportHeight = viewportSize
-        } else {
-            camera.viewportHeight = viewportSize * hRatio
-            camera.viewportWidth = viewportSize
-        }
-        updateCamera()
+        worldStage.resize(width, height)
     }
 
     override fun pause() {
@@ -239,72 +83,27 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
 
     override fun dispose() {
         // Destroy screen's assets here.
-        batch.dispose()
-        shapeRenderer.dispose()
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        // TODO: Auto-generated method stub
-        return false
+        return this.worldStage.keyDown(keycode)
     }
 
     override fun keyUp(keycode: Int): Boolean {
         if (gameState.settings.getAction(keycode) == ActionCommand.OPEN_MENU) {
             Gdx.app.exit()
         }
+        this.worldStage.keyUp(keycode)
         return false
-    }
-
-    override fun keyTyped(character: Char): Boolean {
-        val characterUpperCase = character.uppercase()
-        val characterKey = Keys.valueOf(characterUpperCase)
-
-        if (gameState.settings.getAction(characterKey) == ActionCommand.INTERACT) {
-            openDoor()
-        } else if (gameState.settings.getAction(characterKey) == ActionCommand.TIME_TRAVEL) {
-            map.teleport(player)
-        } else if (gameState.settings.getAction(characterKey) == ActionCommand.OPEN_INVENTORY) {
-            inventoryStage.visible = !inventoryStage.visible
-        } else if (character == 'p') {
-            gameState.inventory.add("compass")
-            inventoryStage.refresh()
-        }
-        return false
-    }
-
-    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        val mouseCoordinates: Vector2 = toWorldCoordinates(screenX.toFloat(), screenY.toFloat())
-        println("Mouse World coordinates is ${mouseCoordinates.x}:${mouseCoordinates.y}")
-
-        val playerDirection: Vector2 = player.getAbsoluteDirection()
-        println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
-        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
-        // TODO Auto-generated method stub
-        return false
-    }
-
-    fun openDoor() {
-        println("Attempt to toggle door")
-        val playerDirection: Vector2 = player.getAbsoluteDirection()
-        println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
-        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
-    }
-
-    fun toWorldCoordinates(x: Float, y: Float): Vector2 {
-        val mouseInWorldPosition = camera.unproject(Vector3(x, y, 0f))
-        return Vector2(
-                floor(mouseInWorldPosition.x.toDouble() / this.map.getTileWidth()).toFloat(),
-                floor(mouseInWorldPosition.y.toDouble() / this.map.getTileHeight()).toFloat()
-        )
     }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        // TODO: ("Not yet implemented")
+        this.worldStage.touchUp(screenX, screenY, pointer, button)
         return false
     }
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        // TODO: ("Not yet implemented")
+        this.worldStage.touchDragged(screenX, screenY, pointer)
         return false
     }
 
@@ -316,5 +115,14 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
         // TODO: Not yet implemented
         return false
+    }
+
+
+    override fun keyTyped(character: Char): Boolean { 
+        return this.worldStage.keyTyped(character)
+    }
+
+    override fun touchDown(p0: Int, p1: Int, p2: Int, p3: Int): Boolean {
+        return this.worldStage.touchDown(p0, p1, p2, p3)
     }
 }
