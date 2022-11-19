@@ -4,6 +4,7 @@ import GameState
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.math.Rectangle
 import com.last.commit.Wall
+import com.last.commit.audio.GameSoundEffect
 
 class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
         Wall(gridX, gridY, wallCollider, cell), Interactable {
@@ -11,11 +12,13 @@ class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
     override fun interact(otherCollider: Rectangle, state: GameState) {
         println("interacting with door $this")
         if (isClosed) {
+            state.soundEngine.play(GameSoundEffect.DOOR_OPEN)
             isOpen = true
         } else if (isOpen) {
             if (getCollider().overlaps(otherCollider)) {
                 // can't close the door cause it is colliding with given collider
             } else {
+                state.soundEngine.play(GameSoundEffect.DOOR_CLOSE)
                 isOpen = false
             }
         }
