@@ -19,8 +19,10 @@ import com.last.commit.Wall
 class TimeMap(fileName: String) {
     private val CELL_SIZE = 64
 
-    private val walls: Array<Wall> = Array()
-    val mapLoader:TmxMapLoader = TmxMapLoader()
+    private val walls = Array<Wall>()
+    private val doors = Array<Door>()
+    private val collectibles = Array<Collectible>()
+    val mapLoader: TmxMapLoader = TmxMapLoader()
     var mapRenderer: OrthogonalTiledMapRenderer
     var map: TiledMap
     var gridWidth = 0
@@ -38,6 +40,7 @@ class TimeMap(fileName: String) {
         mapRenderer = OrthogonalTiledMapRenderer(map)
         loadDimensions()
         loadWalls()
+        loadCollectibles()
     }
 
     fun teleport(player: Player) {
@@ -51,6 +54,7 @@ class TimeMap(fileName: String) {
                     mapRenderer.map = map
                     loadDimensions()
                     loadWalls()
+                    loadCollectibles()
                 }
             } else {
                 println("Found illegal teleporter. ${teleporter.properties.get("id")}")
@@ -90,6 +94,7 @@ class TimeMap(fileName: String) {
 
     private fun loadWalls() {
         walls.clear()
+        doors.clear()
         val wallsLayer = map.layers["Walls"] as TiledMapTileLayer
         for (column in 0 until wallsLayer.width) {
             for (row in 0 until wallsLayer.height) {
@@ -101,22 +106,44 @@ class TimeMap(fileName: String) {
                         row.toFloat() * wallsLayer.tileHeight, wallsLayer.tileWidth.toFloat(),
                         wallsLayer.tileHeight.toFloat()
                     )
-                    val wall: Wall
                     if (java.lang.Boolean.TRUE == isDoor) {
-                        wall = Door(column, row, wallCollider, cell)
+                        doors.add(Door(column, row, wallCollider, cell))
                     } else {
-                        wall = Wall(column, row, wallCollider, cell)
+                        walls.add(Wall(column, row, wallCollider, cell))
                     }
-                    walls.add(wall)
                 }
             }
         }
     }
 
+    fun loadCollectibles() {
+        this.collectibles.clear()
+        val collectiableLayer = map.layers["Collectibles"]
+        if (collectiableLayer == null) {
+            println("Could not load collectibles layer. Check map.")
+            return
+        }
+        val collectibleMapObjects = collectiableLayer.objects
+        for (mapObject in collectibleMapObjects) {
+            val mapObjectProperties = mapObject.properties
+            val x = mapObjectProperties.get("x", Float::class.java)
+            val y = mapObjectProperties.get("y", Float::class.java)
+            val width = mapObjectProperties.get("width", Float::class.java)
+            val height = mapObjectProperties.get("height", Float::class.java)
+            if (mapObject is RectangleMapObject) {
+                val itemName = mapObjectProperties.get("item", String::class.java)
+                this.collectibles.add(Collectible(itemName, x, y, width, height))
+            } else {
+                println("Found non-rectangular map object at ${x}-${y} skipping it")
+            }
+        }
+        println("Loaded ${collectibles.size} collectibles")
+    }
+
     private fun findDoorByGridPosition(gridX: Int, gridY: Int): Door? {
-        for (wall in walls) {
-            if (wall.gridX == gridX && wall.gridY == gridY && wall is Door) {
-                return wall
+        for (door in doors) {
+            if (door.gridX == gridX && door.gridY == gridY && door is Door) {
+                return door
             }
         }
         return null
@@ -153,13 +180,29 @@ class TimeMap(fileName: String) {
         mapRenderer.render()
     }
 
-    fun isCollidingWithWall(collidable: Collidable): Boolean {
+    fun isCollidingWith(collidable: Collidable): Boolean {
+
         for (wall in walls) {
             if (wall.collidesWidth(collidable)) {
                 return true
             }
         }
+        for (door in doors) {
+            if (door.collidesWidth(collidable)) {
+                return true
+            }
+        }
         return false
+    }
+
+    fun getInteractablesAt(absoluteDirection: Vector2): List<Interactable> {
+        val interactables = ArrayList<Interactable>()
+        val c = collectibles.filter { it.getCollider().contains(absoluteDirection) }
+        interactables.addAll(c)
+        val w = doors.filter { it.getCollider().contains(absoluteDirection) }
+        interactables.addAll(w)
+
+        return interactables
     }
 
 }

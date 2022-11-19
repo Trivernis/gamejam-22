@@ -6,9 +6,9 @@ import com.last.commit.Wall
 
 
 class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
-    Wall(gridX, gridY, wallCollider, cell), Toggleable {
-    override fun toggle() {
-        println("Toggling door$this")
+    Wall(gridX, gridY, wallCollider, cell), Interactable {
+    override fun interact() {
+        println("Toggling door $this")
         isOpen = !isOpen
     }
 
