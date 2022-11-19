@@ -23,7 +23,7 @@ import kotlin.math.floor
 
 
 /** First screen of the application. Displayed after the application is created.  */
-class FirstScreen : Screen, InputProcessor {
+class FirstScreen(val game: Game) : Screen, InputProcessor {
     private var delta = 0f
     private var isColliding = false
     val state = ColorState()
@@ -126,7 +126,13 @@ class FirstScreen : Screen, InputProcessor {
     }
 
     private fun handleInput() {
+
         val horizontalMovement = Vector2()
+
+
+        //if (Gdx.input.isKeyPressed(game.settings.actionKeys.get(ActionCommand.LEFT)))
+
+
         if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)) {
             horizontalMovement.sub(Vector2.X)
         }
@@ -225,21 +231,22 @@ class FirstScreen : Screen, InputProcessor {
     }
 
     override fun keyUp(keycode: Int): Boolean {
-        if (keycode == Keys.ESCAPE) {
+        if (game.settings.isOpenMenuPressed(keycode)) {
             Gdx.app.exit()
         }
         return false
     }
 
     override fun keyTyped(character: Char): Boolean {
-        if (character == 'e') {
+        val keyCode = character.code
+
+        if (game.settings.isInteractPressed(keyCode)) {
             openDoor()
-        } else if (character == 't') {
+        } else if (game.settings.isTimeTravelPressed(keyCode)) {
             map.teleport(player)
-        } else if (character == 'i') {
+        } else if (game.settings.isOpenInventoryPressed(keyCode)) {
             inventoryStage.visible = !inventoryStage.visible
         }
-        // TODO Auto-generated method stub
         return false
     }
 

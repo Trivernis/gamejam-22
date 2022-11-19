@@ -7,7 +7,8 @@ enum class ActionCommand {
 
     //interaction
     OPEN_INVENTORY, TIME_TRAVEL,
+    INTERACT,
 
     //program interaction
-    OPEN_MENU
+    OPEN_MENU,
 }
