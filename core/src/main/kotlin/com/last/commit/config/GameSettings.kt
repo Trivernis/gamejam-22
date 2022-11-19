@@ -16,7 +16,6 @@ class GameSettings {
         actionKeys[ActionCommand.LEFT] = listOf(Keys.LEFT, Keys.A)
         actionKeys[ActionCommand.RIGHT] = listOf(Keys.RIGHT, Keys.D)
         actionKeys[ActionCommand.OPEN_MENU] = listOf(Keys.ESCAPE)
-        actionKeys[ActionCommand.OPEN_INVENTORY] = listOf(Keys.I)
         actionKeys[ActionCommand.TIME_TRAVEL] = listOf(Keys.T)
         actionKeys[ActionCommand.INTERACT] = listOf(Keys.E)
 

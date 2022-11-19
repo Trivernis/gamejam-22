@@ -74,6 +74,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
                 ActionCommand.TIME_TRAVEL -> {
                     map.teleport(player)
                 }
+                else -> {}
             }
             println(action)
             println(gameState.settings.getKeyCode(ActionCommand.OPEN_MENU))
