@@ -6,7 +6,7 @@ enum class ActionCommand {
     UP, DOWN, LEFT, RIGHT,
 
     //interaction
-    OPEN_INVENTORY, TIME_TRAVEL,
+    TIME_TRAVEL,
     INTERACT,
 
     //program interaction

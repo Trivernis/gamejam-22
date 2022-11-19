@@ -11,17 +11,27 @@ public class SoundEngine {
     private val musicTracks: ThreadLocal<HashMap<String, Music>> =
             ThreadLocal.withInitial() { HashMap() }
 
+    lateinit var backgroundMusic : Music
+
     fun play(gameSound: GameSound, volume: Float = 1f) {
         if (gameSound is GameSoundEffect) {
             val sound = loadEffect(gameSound.name)
             sound.play(volume)
             println("Playing sound ${gameSound.name}")
         } else if (gameSound is GameMusic) {
-            val music = loadMusic(gameSound.name)
-            music.volume = volume
-            music.setLooping(true)
-            music.play()
+            backgroundMusic = loadMusic(gameSound.name)
+            backgroundMusic.volume = volume
+            backgroundMusic.setLooping(true)
+            backgroundMusic.play()
         }
+    }
+
+    fun stop() {
+        backgroundMusic.pause()
+    }
+
+    fun resume()  {
+        backgroundMusic.play()
     }
 
     private fun loadEffect(name: String): Sound {

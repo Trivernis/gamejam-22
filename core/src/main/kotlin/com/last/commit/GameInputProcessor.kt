@@ -6,19 +6,13 @@ import com.last.commit.screen.TimeTravelScreen
 
 class GameInputProcessor(val game: Game, ) : InputProcessor{
 
-    val activeScreen = game.screen as TimeTravelScreen
+    lateinit var activeScreen: TimeTravelScreen
 
     override fun keyUp(keycode: Int): Boolean {
-
-        //activeScreen.handleKeyInput(keycode)
         return false
     }
 
     override fun keyTyped(character: Char): Boolean {
-        val characterUpperCase = character.uppercase()
-        val characterKey = Input.Keys.valueOf(characterUpperCase)
-
-        activeScreen.handleKeyInput(characterKey)
         return false
     }
 
@@ -28,6 +22,9 @@ class GameInputProcessor(val game: Game, ) : InputProcessor{
     }
 
     override fun keyDown(keycode: Int): Boolean {
+        game.state.settings.getAction(keycode)?.let {
+            activeScreen.handleKeyInput(it)
+        }
         return false
     }
 

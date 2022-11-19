@@ -5,11 +5,13 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.last.commit.ColorState
 import com.last.commit.Game
+import com.last.commit.config.ActionCommand
 
 class Settings (val parent: Game)  : TimeTravelScreen() {
 
     var open = true
-    override fun handleKeyInput(keyCode: Int) {
+
+    override fun handleKeyInput(action: ActionCommand) {
     }
 
     override fun handleMouseInput(screenX: Int, screenY: Int, pointer: Int, button: Int) {

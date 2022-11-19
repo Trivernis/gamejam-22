@@ -44,6 +44,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     val highlightColor = Color(0f, 0f, 1f, 0.5f)
 
+    var pause = true
     var uiStage: UIStage
 
 
@@ -61,38 +62,52 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         shapeRenderer.setAutoShapeType(true)
 
         player.addItemToInventory("drill")
+        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
+
     }
-    override fun handleKeyInput(keyCode: Int) {
-
-        if (gameState.settings.getAction(keyCode) == ActionCommand.INTERACT) {
-            openDoor()
-        } else if (gameState.settings.getAction(keyCode) == ActionCommand.TIME_TRAVEL) {
-            map.teleport(player)
-        } else if (keyCode == Input.Keys.P) {
+    override fun handleKeyInput(action: ActionCommand) {
+        if (!pause) {
+            when (action) {
+                ActionCommand.INTERACT -> {
+                    openDoor()
+                }
+                ActionCommand.TIME_TRAVEL -> {
+                    map.teleport(player)
+                }
+            }
+            println(action)
+            println(gameState.settings.getKeyCode(ActionCommand.OPEN_MENU))
+            if (action == ActionCommand.OPEN_MENU) {
+                //Gdx.app.exit()
+                parent.changeScreen(Screens.MAIN_MENU)
+            }
+        }
+        //TODO
+        /*
+        else if (action == Input.Keys.P) {
             gameState.inventory.add("compass")
-            uiStage.refresh()
+            inventoryStage.refresh()
         }
-
-        if (gameState.settings.getAction(keyCode) == ActionCommand.OPEN_MENU) {
-            //Gdx.app.exit()
-            parent.changeScreen(Screens.MAIN_MENU)
-        }
+         */
 
     }
 
     override fun handleMouseInput(screenX: Int, screenY: Int, pointer: Int, button: Int) {
-        val mouseCoordinates: Vector2 = toWorldCoordinates(screenX.toFloat(), screenY.toFloat())
-        println("Mouse World coordinates is ${mouseCoordinates.x}:${mouseCoordinates.y}")
+        if (!pause) {
 
-        val playerDirection: Vector2 = player.getAbsoluteDirection()
-        println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
-        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
+            val mouseCoordinates: Vector2 = toWorldCoordinates(screenX.toFloat(), screenY.toFloat())
+            println("Mouse World coordinates is ${mouseCoordinates.x}:${mouseCoordinates.y}")
+            val playerDirection: Vector2 = player.getAbsoluteDirection()
+
+            println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
+            map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
+        }
     }
 
     override fun show() {
         // Prepare your screen here.
 
-        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
+        resume()
     }
 
     fun loadGameConfig(): GameConfig {
@@ -103,24 +118,25 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     }
 
     override fun render(delta: Float) {
+        if (!pause) {
+            handleInput(delta)
+            handleMapBorderCollision()
 
-        handleInput()
-        handleMapBorderCollision()
+            val mousePosition: Vector2 = getMousePosition()
+            player.lookAt(mousePosition)
 
-        val mousePosition: Vector2 = getMousePosition()
-        player.lookAt(mousePosition)
+            batch.projectionMatrix = camera.combined
+            batch.begin()
+            this.map.render(batch, camera, delta)
+            this.player.render(batch)
+            batch.end()
 
-        batch.projectionMatrix = camera.combined
-        batch.begin()
-        this.map.render(batch, camera, delta)
-        this.player.render(batch)
-        batch.end()
+            val interactables = map.getInteractablesAt(player.getAbsoluteDirection())
+            renderInteractables(interactables)
 
-        val interactables = map.getInteractablesAt(player.getAbsoluteDirection())
-        renderInteractables(interactables)
-
-        uiStage.act(delta)
-        uiStage.draw()
+            uiStage.act(delta)
+            uiStage.draw()
+        }
     }
 
     fun renderInteractables(interactables: List<Interactable>) {
@@ -156,7 +172,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         this.player.setPosition(playerX, playerY)
     }
 
-    private fun handleInput() {
+    private fun handleInput(delta : Float) {
         val horizontalMovement = Vector2()
         if (isKeyPressed(gameState.settings.getKeyCode(ActionCommand.LEFT))) {
             horizontalMovement.sub(Vector2.X)
@@ -262,14 +278,19 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     }
 
     override fun pause() {
-        // Invoked when your application is paused.
+        pause = true
+        gameState.soundEngine.stop()
+
     }
 
     override fun resume() {
+        pause = false
+        gameState.soundEngine.resume();
         // Invoked when your application is resumed after pause.
     }
 
     override fun hide() {
+        pause()
     }
 
     override fun dispose() {
