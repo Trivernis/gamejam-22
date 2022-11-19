@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.last.commit.inventory.Inventory
-import com.last.commit.audio.GameSoundEffect
 import GameState
+import com.last.commit.audio.GameSoundEffect
 
 
 class Player(private val textureRegion: TextureRegion, private val gameState: GameState) : Collidable {
@@ -37,7 +37,7 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
     }
 
     fun move(v: Vector2, delta: Float) {
-        if (v.x != 0f || v.y != 0f) {   
+        if (v.x != 0f || v.y != 0f) {
             updatePosition(v, delta)
             updateCollider()
 
@@ -117,10 +117,13 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
     }
 
     fun render(batch: SpriteBatch) {
+
+
         val halfPlayerWidth: Float = getHalfPlayerWidth() // TODO maybe use collider
         // dimensions
         val halfPlayerHeight: Float = getHalfPlayerHeight() // TODO maybe use collider
         // dimensions
+
         batch.draw(
             textureRegion, getX(), getY(),
             halfPlayerWidth, halfPlayerHeight, getWidth(),
