@@ -38,9 +38,13 @@ class GameSettings {
     }
 
 
-    fun getKeyCode(actionCommand: ActionCommand): List<Int>? {
-        return actionKeys[actionCommand]
+    fun getKeyCode(actionCommand: ActionCommand): List<Int> {
 
+        return if (Objects.nonNull(actionKeys[actionCommand])) {
+            actionKeys[actionCommand]!!
+        } else {
+            listOf()
+        }
     }
 
 }

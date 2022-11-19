@@ -128,11 +128,12 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
     }
 
     private fun handleInput() {
+
         val horizontalMovement = Vector2()
-        if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)) {
+        if (isKeyPressed(gameState.settings.getKeyCode(ActionCommand.LEFT))) {
             horizontalMovement.sub(Vector2.X)
         }
-        if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) {
+        if (isKeyPressed(gameState.settings.getKeyCode(ActionCommand.RIGHT))) {
             horizontalMovement.add(Vector2.X)
         }
         this.player.move(horizontalMovement, delta)
@@ -142,10 +143,10 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
             this.player.move(horizontalMovement, delta)
         }
         val verticalMovement = Vector2()
-        if (Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP)) {
+        if (isKeyPressed(gameState.settings.getKeyCode(ActionCommand.UP))) {
             verticalMovement.add(Vector2.Y)
         }
-        if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
+        if (isKeyPressed(gameState.settings.getKeyCode(ActionCommand.DOWN))) {
             verticalMovement.sub(Vector2.Y)
         }
         this.player.move(verticalMovement, delta)
@@ -158,6 +159,15 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
         if (hasMoved) {
             updateCamera()
         }
+    }
+
+    fun isKeyPressed(keyCodes: List<Int>): Boolean{
+        for (key in keyCodes) {
+            if (Gdx.input.isKeyPressed(key)) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun spawnPlayer() {
