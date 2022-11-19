@@ -484,7 +484,7 @@
  <objectgroup id="10" name="Teleporter">
   <object id="2" x="1664" y="1856" width="192" height="128">
    <properties>
-    <property name="target" value="herbst.tmx"/>
+    <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
  </objectgroup>
@@ -497,7 +497,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="12" name="SFX">
+ <objectgroup id="12" name="SFX" visible="0">
   <object id="6" x="1536" y="3008" width="384" height="704">
    <properties>
     <property name="ground" value="indoor"/>
