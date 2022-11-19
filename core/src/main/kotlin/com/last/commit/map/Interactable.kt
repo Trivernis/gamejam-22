@@ -5,5 +5,5 @@ import com.badlogic.gdx.math.Rectangle
 interface Interactable {
     fun getCollider(): Rectangle
 
-    fun interact()
+    fun interact(otherCollider: Rectangle)
 }

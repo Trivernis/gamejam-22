@@ -24,12 +24,13 @@ import kotlin.math.floor
 
 /** First screen of the application. Displayed after the application is created.  */
 class FirstScreen(val game: Game) : Screen, InputProcessor {
+    val viewportSize = 800f
     private var delta = 0f
     private var isColliding = false
     val state = ColorState()
 
     val batch = SpriteBatch()
-    val camera = OrthographicCamera(800f, 600f)
+    val camera = OrthographicCamera(viewportSize, viewportSize)
     lateinit var map: TimeMap // = TimeMap("tiled/base.tmx")
     val playerTexture = Texture("sprites/characters.png")
     val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43))
@@ -45,6 +46,7 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
         val gameConfig = this.loadGameConfig()
         val randomMap = gameConfig.getRandomMap()
         map = TimeMap(randomMap)
+        handleRatioChange()
 
         this.spawnPlayer()
         this.updateCamera()
@@ -65,7 +67,7 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
 
     override fun render(delta: Float) {
         this.delta = delta
-//        state.step((delta * 1000).toLong())
+        //        state.step((delta * 1000).toLong())
         // Draw your screen here. "delta" is the time since last render in seconds.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         Gdx.gl.glClearColor(state.red, state.green, state.blue, 1f)
@@ -75,10 +77,7 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
 
         val mousePosition: Vector2 = getMousePosition()
         player.lookAt(mousePosition)
-        val interactables = map.getInteractablesAt(
-            player.getAbsoluteDirection()
-        )
-
+        val interactables = map.getInteractablesAt(player.getAbsoluteDirection())
 
         batch.projectionMatrix = camera.combined
         batch.begin()
@@ -86,9 +85,8 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
         this.player.render(batch)
         batch.end()
 
-        //TODO: auslagern in sperate Methode
+        // TODO: auslagern in sperate Methode
         renderInteractables(interactables)
-
 
         inventoryStage.draw()
     }
@@ -101,10 +99,10 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
         for (interactable in interactables) {
             shapeRenderer.rect(
-                interactable.getCollider().x,
-                interactable.getCollider().y,
-                interactable.getCollider().width,
-                interactable.getCollider().height
+                    interactable.getCollider().x,
+                    interactable.getCollider().y,
+                    interactable.getCollider().width,
+                    interactable.getCollider().height
             )
         }
         shapeRenderer.end()
@@ -112,7 +110,8 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
     }
 
     private fun getMousePosition(): Vector2 {
-        val unprojectedMousePosition = camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
+        val unprojectedMousePosition =
+                camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
         return Vector2(unprojectedMousePosition.x, unprojectedMousePosition.y)
     }
 
@@ -126,13 +125,7 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
     }
 
     private fun handleInput() {
-
         val horizontalMovement = Vector2()
-
-
-        //if (Gdx.input.isKeyPressed(game.settings.actionKeys.get(ActionCommand.LEFT)))
-
-
         if (Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT)) {
             horizontalMovement.sub(Vector2.X)
         }
@@ -183,21 +176,22 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
         val playerYPosition: Float = this.player.getY()
         val mapWidth: Int = map.width
         val mapHeight: Int = map.height
+
         cX = if (playerXPosition < halfScreenWidth) {
-            halfScreenWidth
-        } else if (playerXPosition > mapWidth - halfScreenWidth) {
-            mapWidth - halfScreenWidth
-        } else {
-            playerXPosition
-        }
+                halfScreenWidth
+            } else if (playerXPosition > mapWidth - halfScreenWidth) {
+                mapWidth - halfScreenWidth
+            } else {
+                playerXPosition
+            }
 
         cY = if (playerYPosition < halfScreenHeight) {
-            halfScreenHeight
-        } else if (playerYPosition > mapHeight - halfScreenHeight) {
-            mapHeight - halfScreenHeight
-        } else {
-            playerYPosition
-        }
+                halfScreenHeight
+            } else if (playerYPosition > mapHeight - halfScreenHeight) {
+                mapHeight - halfScreenHeight
+            } else {
+                playerYPosition
+            }
 
         camera.position[cX, cY] = 0f
         camera.update()
@@ -205,6 +199,24 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
 
     override fun resize(width: Int, height: Int) {
         // Resize your screen here. The parameters represent the new window size.
+        inventoryStage.resize(width, height)
+        handleRatioChange()
+    }
+
+    fun handleRatioChange() {
+        val height = Gdx.graphics.height
+        val width = Gdx.graphics.width
+
+        val wRatio = width.toFloat() / height.toFloat()
+        val hRatio = height.toFloat() / width.toFloat()
+        if (wRatio < 1) {
+            camera.viewportWidth = viewportSize * wRatio
+            camera.viewportHeight = viewportSize
+        } else {
+            camera.viewportHeight = viewportSize * hRatio
+            camera.viewportWidth = viewportSize
+        }
+        updateCamera()
     }
 
     override fun pause() {
@@ -246,6 +258,9 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
             map.teleport(player)
         } else if (game.settings.isOpenInventoryPressed(keyCode)) {
             inventoryStage.visible = !inventoryStage.visible
+        } else if (character == 'p') {
+            player.inventory.add("compass")
+            inventoryStage.refresh()
         }
         return false
     }
@@ -256,7 +271,7 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
 
         val playerDirection: Vector2 = player.getAbsoluteDirection()
         println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
-        map.toggleDoorAt(playerDirection.x, playerDirection.y, player.getCollider())
+        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
         // TODO Auto-generated method stub
         return false
     }
@@ -265,34 +280,34 @@ class FirstScreen(val game: Game) : Screen, InputProcessor {
         println("Attempt to toggle door")
         val playerDirection: Vector2 = player.getAbsoluteDirection()
         println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
-        map.toggleDoorAt(playerDirection.x, playerDirection.y, player.getCollider())
+        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
     }
 
     fun toWorldCoordinates(x: Float, y: Float): Vector2 {
         val mouseInWorldPosition = camera.unproject(Vector3(x, y, 0f))
         return Vector2(
-            floor(mouseInWorldPosition.x.toDouble() / this.map.getTileWidth()).toFloat(),
-            floor(mouseInWorldPosition.y.toDouble() / this.map.getTileHeight()).toFloat()
+                floor(mouseInWorldPosition.x.toDouble() / this.map.getTileWidth()).toFloat(),
+                floor(mouseInWorldPosition.y.toDouble() / this.map.getTileHeight()).toFloat()
         )
     }
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        //TODO: ("Not yet implemented")
+        // TODO: ("Not yet implemented")
         return false
     }
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-        //TODO: ("Not yet implemented")
+        // TODO: ("Not yet implemented")
         return false
     }
 
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
-        //TODO: "Not yet implemented"
+        // TODO: "Not yet implemented"
         return false
     }
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
-        //TODO: Not yet implemented
+        // TODO: Not yet implemented
         return false
     }
 }
