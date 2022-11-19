@@ -89,7 +89,7 @@ class Player(private val textureRegion: TextureRegion) : Collidable {
     }
 
     /**
-     * Returns the direction of the player in World positon
+     * Returns the direction of the player in World positon considerung the interactionRange
      */
     fun getAbsoluteDirection(): Vector2 {
         return position.cpy().add(getRelativeDirection())

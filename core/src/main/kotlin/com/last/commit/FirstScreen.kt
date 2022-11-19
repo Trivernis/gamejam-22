@@ -4,16 +4,19 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Json
 import com.last.commit.config.GameConfig
+import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
 import com.last.commit.stages.InventoryStage
 import kotlin.math.floor
@@ -30,6 +33,9 @@ class FirstScreen : Screen, InputProcessor {
     lateinit var map: TimeMap // = TimeMap("tiled/base.tmx")
     val playerTexture = Texture("sprites/characters.png")
     val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43))
+    var shapeRenderer = ShapeRenderer()
+
+    val highlightColor = Color(0f, 0f, 1f, 0.5f)
 
     lateinit var inventoryStage: InventoryStage
 
@@ -45,6 +51,7 @@ class FirstScreen : Screen, InputProcessor {
 
         player.addItemToInventory("drill")
         inventoryStage = InventoryStage(player.inventory)
+        shapeRenderer.setAutoShapeType(true);
 
         Gdx.input.setInputProcessor(this)
     }
@@ -68,6 +75,10 @@ class FirstScreen : Screen, InputProcessor {
 
         val mousePosition: Vector2 = getMousePosition()
         player.lookAt(mousePosition)
+        var interactables = map.getInteractablesAt(
+            player.getAbsoluteDirection()
+        )
+
 
         batch.projectionMatrix = camera.combined
         batch.begin()
@@ -75,7 +86,29 @@ class FirstScreen : Screen, InputProcessor {
         this.player.render(batch)
         batch.end()
 
+        //TODO: auslagern in sperate Methode
+        renderInteractables(interactables)
+
+
         inventoryStage.draw()
+    }
+
+    fun renderInteractables(interactables: List<Interactable>) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setProjectionMatrix(this.camera.combined);
+        shapeRenderer.setColor(highlightColor);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        for (interactable in interactables) {
+            shapeRenderer.rect(
+                interactable.getCollider().x,
+                interactable.getCollider().y,
+                interactable.getCollider().width,
+                interactable.getCollider().height
+            )
+        }
+        shapeRenderer.end()
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     private fun getMousePosition(): Vector2 {
@@ -183,6 +216,7 @@ class FirstScreen : Screen, InputProcessor {
     override fun dispose() {
         // Destroy screen's assets here.
         batch.dispose()
+        shapeRenderer.dispose()
     }
 
     override fun keyDown(keycode: Int): Boolean {

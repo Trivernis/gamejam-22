@@ -19,8 +19,9 @@ import com.last.commit.Wall
 class TimeMap(fileName: String) {
     private val CELL_SIZE = 64
 
-    private val walls: Array<Wall> = Array()
-    val mapLoader:TmxMapLoader = TmxMapLoader()
+    private val walls = Array<Wall>()
+    private val collectibles = Array<Collectible>()
+    val mapLoader: TmxMapLoader = TmxMapLoader()
     var mapRenderer: OrthogonalTiledMapRenderer
     var map: TiledMap
     var gridWidth = 0
@@ -38,6 +39,7 @@ class TimeMap(fileName: String) {
         mapRenderer = OrthogonalTiledMapRenderer(map)
         loadDimensions()
         loadWalls()
+        loadCollectibles()
     }
 
     fun teleport(player: Player) {
@@ -51,6 +53,7 @@ class TimeMap(fileName: String) {
                     mapRenderer.map = map
                     loadDimensions()
                     loadWalls()
+                    loadCollectibles()
                 }
             } else {
                 println("Found illegal teleporter. ${teleporter.properties.get("id")}")
@@ -113,6 +116,30 @@ class TimeMap(fileName: String) {
         }
     }
 
+    fun loadCollectibles() {
+        this.collectibles.clear()
+        val collectiableLayer = map.layers["Collectibles"]
+        if (collectiableLayer == null) {
+            println("Could not load collectibles layer. Check map.")
+            return
+        }
+        val collectibleMapObjects = collectiableLayer.objects
+        for (mapObject in collectibleMapObjects) {
+            val mapObjectProperties = mapObject.properties
+            val x = mapObjectProperties.get("x", Float::class.java)
+            val y = mapObjectProperties.get("y", Float::class.java)
+            val width = mapObjectProperties.get("width", Float::class.java)
+            val height = mapObjectProperties.get("height", Float::class.java)
+            if (mapObject is RectangleMapObject) {
+                val itemName = mapObjectProperties.get("item", String::class.java)
+                this.collectibles.add(Collectible(itemName, x, y, width, height))
+            } else {
+                println("Found non-rectangular map object at ${x}-${y} skipping it")
+            }
+        }
+        println("Loaded ${collectibles.size} collectibles")
+    }
+
     private fun findDoorByGridPosition(gridX: Int, gridY: Int): Door? {
         for (wall in walls) {
             if (wall.gridX == gridX && wall.gridY == gridY && wall is Door) {
@@ -160,6 +187,16 @@ class TimeMap(fileName: String) {
             }
         }
         return false
+    }
+
+    fun getInteractablesAt(absoluteDirection: Vector2): List<Interactable> {
+        val interactables = ArrayList<Interactable>()
+        val c = collectibles.filter { it.getCollider().contains(absoluteDirection) }
+        interactables.addAll(c)
+        val w = walls.filter { it.getCollider().contains(absoluteDirection) }
+//        interactables.addAll(w)
+
+        return interactables
     }
 
 }
