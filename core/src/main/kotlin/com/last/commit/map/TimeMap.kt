@@ -158,10 +158,11 @@ class TimeMap(fileName: String, val state: GameState) {
             val height = mapObjectProperties.get("height", Float::class.java)
 
             if (mapObject is RectangleMapObject) {
-                val itemName = mapObjectProperties.get("item", String::class.java)
-                itemName?. let {
-                    this.collectibles.add(Collectible(itemName, Position(x, y, gridX, gridY), width, height))
-                }
+                //check wether itemName is null and continue in case it is
+                val itemName = mapObjectProperties.get("item", String::class.java) ?: continue
+                val requiredItem = mapObjectProperties.get("requiredItem", String::class.java) ?: ""
+
+                this.collectibles.add(Collectible(itemName, Position(x, y, gridX, gridY), width, height, requiredItem))
             } else {
                 println("Found non-rectangular map object at ${x}-${y} skipping it")
             }
@@ -186,13 +187,16 @@ class TimeMap(fileName: String, val state: GameState) {
     fun interactWith(x: Float, y: Float, blockingCollider: Rectangle) {
         val gridX = x.toInt() / CELL_SIZE
         val gridY = y.toInt() / CELL_SIZE
-        println("Interacting with element at $gridX:$gridY")
 
         //if no door is found return
         val interactable: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
         //else continue
-
-        interactable.interact(blockingCollider, state)
+        if (interactable.canInteract(state)) {
+            println("Interacting with element at $gridX:$gridY")
+            interactable.interact(blockingCollider, state)
+        } else {
+            println("Cannot interact with $gridX:$gridY")
+        }
     }
 
 
