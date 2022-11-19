@@ -1,7 +1,7 @@
 import com.last.commit.inventory.Inventory
-import com.last.commit.config.PlayerSettings
+import com.last.commit.config.GameSettings
 
-public data class GameState(
-    public val inventory: Inventory,
-    public val settings: PlayerSettings,
+data class GameState(
+    val inventory: Inventory,
+    val settings: GameSettings,
 )
