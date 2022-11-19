@@ -61,7 +61,7 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
         shapeRenderer.setAutoShapeType(true)
 
         Gdx.input.setInputProcessor(this)
-        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.5f)
+        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
     }
 
     fun loadGameConfig(): GameConfig {

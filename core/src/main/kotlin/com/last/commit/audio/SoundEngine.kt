@@ -19,8 +19,8 @@ public class SoundEngine {
             println("Playing sound ${gameSound.name}")
         } else if (gameSound is GameMusic) {
             val music = loadMusic(gameSound.name)
-            music.stop()
             music.volume = volume
+            music.setLooping(true)
             music.play()
         }
     }
