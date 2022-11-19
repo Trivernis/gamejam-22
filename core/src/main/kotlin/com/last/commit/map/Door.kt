@@ -1,13 +1,14 @@
 package com.last.commit.map
 
+import GameState
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.math.Rectangle
 import com.last.commit.Wall
 
-
 class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
-    Wall(gridX, gridY, wallCollider, cell), Interactable {
-    override fun interact(otherCollider: Rectangle) {
+        Wall(gridX, gridY, wallCollider, cell), Interactable {
+
+    override fun interact(otherCollider: Rectangle, state: GameState) {
         println("interacting with door $this")
         if (isClosed) {
             isOpen = true
@@ -42,8 +43,12 @@ class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
 
     override fun toString(): String {
         return String.format(
-            "Door: %f:%f - %f:%f (isOpen: %b)", wallCollider.x, wallCollider.y, wallCollider.width,
-            wallCollider.height, isOpen
+                "Door: %f:%f - %f:%f (isOpen: %b)",
+                wallCollider.x,
+                wallCollider.y,
+                wallCollider.width,
+                wallCollider.height,
+                isOpen
         )
     }
 }

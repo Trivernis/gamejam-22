@@ -5,17 +5,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.last.commit.inventory.Inventory
+import GameState
 
 
-class Player(private val textureRegion: TextureRegion) : Collidable {
+class Player(private val textureRegion: TextureRegion, private val gameState: GameState) : Collidable {
 
     private var collider: Rectangle = Rectangle(0f, 0f, 0f, 0f)
     var position: Vector2 = Vector2.Zero
     private var direction = Vector2.Zero
     private val movementSpeed = 200f
     private val interactionRange = 60f
-
-    val inventory = Inventory("sprites/genericItems_spritesheet_colored")
 
     init {
         val size = Math.max(textureRegion.regionWidth, textureRegion.regionHeight).toFloat()
@@ -24,7 +23,7 @@ class Player(private val textureRegion: TextureRegion) : Collidable {
     }
 
     fun addItemToInventory(name: String) {
-        this.inventory.add(name)
+        gameState.inventory.add(name)
     }
 
     fun getX(): Float {

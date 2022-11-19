@@ -15,9 +15,10 @@ import com.last.commit.Collidable
 import com.last.commit.Player
 import com.last.commit.Wall
 import Position
+import GameState
 
 
-class TimeMap(fileName: String) {
+class TimeMap(fileName: String, val state: GameState) {
     private val CELL_SIZE = 64
 
     private val walls = Array<Wall>()
@@ -168,7 +169,7 @@ class TimeMap(fileName: String) {
         val interactable: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
         //else continue
 
-        interactable.interact(blockingCollider)
+        interactable.interact(blockingCollider, state)
     }
 
 

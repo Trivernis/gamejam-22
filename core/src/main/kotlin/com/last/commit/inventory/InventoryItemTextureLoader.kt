@@ -12,19 +12,26 @@ class InventoryItemTextureLoader(path: String) {
     private val itemsSpriteSheet: Texture
     private val textureMapping: FileHandle
     private lateinit var subTextures: Array<XmlReader.Element>
+    private val textures: HashMap<String, TextureRegion> = HashMap()
 
     init {
         itemsSpriteSheet = Texture("${path}.png")
         textureMapping = Gdx.files.local("${path}.xml")
     }
 
-    fun loadTexture(itemName: String): TextureRegion {
-        var subtexture = subTextures.first { it.getAttribute("name") == itemName }
-        val x = subtexture.getIntAttribute("x")
-        val y = subtexture.getIntAttribute("y")
-        val width = subtexture.getIntAttribute("width")
-        val height = subtexture.getIntAttribute("height")
-        return TextureRegion(itemsSpriteSheet, x, y, width, height)
+    fun getTexture(itemName: String): TextureRegion {
+        var itemTexture = textures.get(itemName)
+
+        if (itemTexture == null) {
+            var subtexture = subTextures.first { it.getAttribute("name") == itemName }
+            val x = subtexture.getIntAttribute("x")
+            val y = subtexture.getIntAttribute("y")
+            val width = subtexture.getIntAttribute("width")
+            val height = subtexture.getIntAttribute("height")
+            itemTexture = TextureRegion(itemsSpriteSheet, x, y, width, height)
+            this.textures.set(itemName, itemTexture)
+        }
+        return itemTexture
     }
 
     fun parse() {
@@ -33,5 +40,4 @@ class InventoryItemTextureLoader(path: String) {
         this.subTextures = textureAtlasElement.getChildrenByName("SubTexture")
         println("Found ${subTextures.size} textures")
     }
-
 }

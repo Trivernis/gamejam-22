@@ -20,9 +20,10 @@ import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
 import com.last.commit.stages.InventoryStage
 import kotlin.math.floor
+import GameState
 
 /** First screen of the application. Displayed after the application is created. */
-class FirstScreen : Screen, InputProcessor {
+class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
 
     val viewportSize = 800f
 
@@ -34,7 +35,7 @@ class FirstScreen : Screen, InputProcessor {
     val camera = OrthographicCamera(viewportSize, viewportSize)
     lateinit var map: TimeMap // = TimeMap("tiled/base.tmx")
     val playerTexture = Texture("sprites/characters.png")
-    val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43))
+    val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43), gameState)
     var shapeRenderer = ShapeRenderer()
 
     val highlightColor = Color(0f, 0f, 1f, 0.5f)
@@ -46,14 +47,14 @@ class FirstScreen : Screen, InputProcessor {
 
         val gameConfig = this.loadGameConfig()
         val randomMap = gameConfig.getRandomMap()
-        map = TimeMap(randomMap)
+        map = TimeMap(randomMap, gameState)
         handleRatioChange()
 
         this.spawnPlayer()
         this.updateCamera()
 
         player.addItemToInventory("drill")
-        inventoryStage = InventoryStage(player.inventory)
+        inventoryStage = InventoryStage("sprites/genericItems_spritesheet_colored", gameState.inventory)
         shapeRenderer.setAutoShapeType(true)
 
         Gdx.input.setInputProcessor(this)
@@ -258,7 +259,7 @@ class FirstScreen : Screen, InputProcessor {
         } else if (character == 'i') {
             inventoryStage.visible = !inventoryStage.visible
         } else if (character == 'p') {
-            player.inventory.add("compass")
+            gameState.inventory.add("compass")
             inventoryStage.refresh()
         }
         return false

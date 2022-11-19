@@ -3,8 +3,14 @@ package com.last.commit.stages
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.inventory.Inventory
+import com.last.commit.inventory.InventoryItemTextureLoader
 
-class InventoryStage(val inventory: Inventory) : Stage() {
+class InventoryStage(path: String, val inventory: Inventory) : Stage() {
+    val textureLoader = InventoryItemTextureLoader(path)
+    
+    init {
+        textureLoader.parse()
+    }
 
     var visible = false
         set(visible) {
@@ -17,7 +23,7 @@ class InventoryStage(val inventory: Inventory) : Stage() {
     fun refresh() {
         super.clear()
         inventory.items.forEachIndexed { index, inventoryItem ->
-            val image = Image(inventoryItem.texture)
+            val image = Image(textureLoader.getTexture(inventoryItem.name))
             image.x = index * 32f
             image.width = 32f
             image.height = 32f
@@ -31,6 +37,9 @@ class InventoryStage(val inventory: Inventory) : Stage() {
     }
 
     override fun draw() {
+        if (inventory.updated) {
+            this.refresh()
+        }
         if (visible) {
             super.draw()
         }

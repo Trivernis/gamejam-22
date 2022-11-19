@@ -2,6 +2,7 @@ package com.last.commit.map
 
 import com.badlogic.gdx.math.Rectangle
 import Position
+import GameState
 
 class Collectible(
         name: String,
@@ -18,8 +19,9 @@ class Collectible(
         this.collider = Rectangle(pos.x, pos.y, width, height)
     }
 
-    override fun interact(otherCollider: Rectangle) {
+    override fun interact(otherCollider: Rectangle, state: GameState) {
         println("Interacting with item $name")
+        state.inventory.add(this.name)
     }
 
     override fun getCollider(): Rectangle {
