@@ -15,7 +15,7 @@ class Player(private val textureRegion: TextureRegion) : Collidable {
     private val movementSpeed = 200f
     private val interactionRange = 60f
 
-    val inventory = Inventory()
+    val inventory = Inventory("sprites/genericItems_spritesheet_colored")
 
     init {
         val size = Math.max(textureRegion.regionWidth, textureRegion.regionHeight).toFloat()

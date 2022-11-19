@@ -198,6 +198,7 @@ class FirstScreen : Screen, InputProcessor {
     }
 
     override fun resize(width: Int, height: Int) {
+        inventoryStage.resize(width, height)
         // Resize your screen here. The parameters represent the new window size.
     }
 
@@ -238,8 +239,10 @@ class FirstScreen : Screen, InputProcessor {
             map.teleport(player)
         } else if (character == 'i') {
             inventoryStage.visible = !inventoryStage.visible
+        } else if (character == 'p') {
+            player.inventory.add("compass")
+            inventoryStage.refresh()
         }
-        // TODO Auto-generated method stub
         return false
     }
 

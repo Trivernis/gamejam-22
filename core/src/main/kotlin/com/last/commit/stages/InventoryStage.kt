@@ -4,14 +4,21 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.inventory.Inventory
 
-class InventoryStage(inventory: Inventory) : Stage() {
+class InventoryStage(val inventory: Inventory) : Stage() {
 
     var visible = false
+        set(visible) {
+            field = visible
+            if (visible) {
+                refresh()
+            }
+        }
 
-    init {
-        for (item in inventory.items) {
-
-            val image = Image(item.texture)
+    fun refresh() {
+        super.clear()
+        inventory.items.forEachIndexed { index, inventoryItem ->
+            val image = Image(inventoryItem.texture)
+            image.x = index * 32f
             image.width = 32f
             image.height = 32f
 
