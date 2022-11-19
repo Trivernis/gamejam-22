@@ -1,6 +1,8 @@
 {
   "maps": [
-    "tiled/base.tmx",
-    "tiled/demo.tmx"
+    "tiled/level_fruehling.tmx",
+    "tiled/level_herbst.tmx",
+    "tiled/level_sommer.tmx",
+    "tiled/level_winter.tmx"
   ]
 }
