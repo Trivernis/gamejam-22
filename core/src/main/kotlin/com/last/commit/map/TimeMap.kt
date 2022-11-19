@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array
 import com.last.commit.Collidable
 import com.last.commit.Player
 import com.last.commit.Wall
+import com.last.commit.audio.GameSoundEffect
 import Position
 import GameState
 
@@ -50,6 +51,7 @@ class TimeMap(fileName: String, val state: GameState) {
         for (teleporter in teleporters) {
             if (teleporter is RectangleMapObject) {
                 if (teleporter.rectangle.contains(player.getX(), player.getY())) {
+                    state.soundEngine.play(GameSoundEffect.TIME_TRAVEL)
                     val targetMap = teleporter.properties.get("target", String::class.java)
                     System.out.println("Teleporting to targetMap $targetMap")
                     map = mapLoader.load("tiled/$targetMap")
@@ -67,6 +69,7 @@ class TimeMap(fileName: String, val state: GameState) {
     fun getPlayerSpawn(): Vector2 {
         val mapLayers = map.layers
         val spawnPoints = mapLayers["Spawnpoints"].objects
+
         for (spawnPoint in spawnPoints) {
             val spawnPointProperties = spawnPoint.properties
             if (spawnPointProperties != null && spawnPointProperties.containsKey("playerSpawn")) {
