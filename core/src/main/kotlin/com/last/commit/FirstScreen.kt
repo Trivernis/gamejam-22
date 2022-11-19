@@ -1,5 +1,6 @@
 package com.last.commit
 
+import GameState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.InputProcessor
@@ -15,12 +16,14 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Json
+import com.last.commit.config.ActionCommand
 import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
 import com.last.commit.stages.InventoryStage
+import com.last.commit.audio.GameSoundEffect
+import com.last.commit.audio.GameMusic
 import kotlin.math.floor
-import GameState
 
 /** First screen of the application. Displayed after the application is created. */
 class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
@@ -58,6 +61,7 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
         shapeRenderer.setAutoShapeType(true)
 
         Gdx.input.setInputProcessor(this)
+        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.5f)
     }
 
     fun loadGameConfig(): GameConfig {
@@ -245,26 +249,25 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
     }
 
     override fun keyUp(keycode: Int): Boolean {
-        if (keycode == Keys.ESCAPE) {
+        if (gameState.settings.getAction(keycode) == ActionCommand.OPEN_MENU) {
             Gdx.app.exit()
         }
         return false
     }
 
     override fun keyTyped(character: Char): Boolean {
-        val keyCode = character.code
+        val characterUpperCase = character.uppercase()
+        val characterKey = Keys.valueOf(characterUpperCase)
 
-        if (gameState.settings.isInteractPressed(keyCode)) {
+        if (gameState.settings.getAction(characterKey) == ActionCommand.INTERACT) {
             openDoor()
-        } else if (gameState.settings.isTimeTravelPressed(keyCode)) {
+        } else if (gameState.settings.getAction(characterKey) == ActionCommand.TIME_TRAVEL) {
             map.teleport(player)
-        } else if (gameState.settings.isOpenInventoryPressed(keyCode)) {
+        } else if (gameState.settings.getAction(characterKey) == ActionCommand.OPEN_INVENTORY) {
             inventoryStage.visible = !inventoryStage.visible
         } else if (character == 'p') {
             gameState.inventory.add("compass")
             inventoryStage.refresh()
-        } else if (gameState.settings.isInteractPressed(keyCode)) {
-            this.openDoor()
         }
         return false
     }

@@ -1,9 +1,10 @@
 package com.last.commit
 
-import com.badlogic.gdx.Game
-import com.last.commit.inventory.Inventory
-import com.last.commit.config.PlayerSettings
 import GameState
+import com.badlogic.gdx.Game
+import com.last.commit.config.GameSettings
+import com.last.commit.inventory.Inventory
+import com.last.commit.audio.SoundEngine
 
 /** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms.  */
 class Game : Game() {
@@ -18,7 +19,8 @@ class Game : Game() {
     fun createState() {
         state = GameState(
             Inventory(),
-            PlayerSettings()
+            GameSettings(),
+            SoundEngine()
         )
     }
 }
