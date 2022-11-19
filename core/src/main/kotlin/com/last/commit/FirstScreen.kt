@@ -252,7 +252,7 @@ class FirstScreen : Screen, InputProcessor {
 
         val playerDirection: Vector2 = player.getAbsoluteDirection()
         println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
-        map.toggleDoorAt(playerDirection.x, playerDirection.y, player.getCollider())
+        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
         // TODO Auto-generated method stub
         return false
     }
@@ -261,7 +261,7 @@ class FirstScreen : Screen, InputProcessor {
         println("Attempt to toggle door")
         val playerDirection: Vector2 = player.getAbsoluteDirection()
         println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
-        map.toggleDoorAt(playerDirection.x, playerDirection.y, player.getCollider())
+        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
     }
 
     fun toWorldCoordinates(x: Float, y: Float): Vector2 {
