@@ -18,7 +18,7 @@
     <SubTexture name="genericItem_color_017.png" x="365" y="1459" width="98" height="152"/>
     <SubTexture name="genericItem_color_018.png" x="691" y="1001" width="48" height="62"/>
     <SubTexture name="genericItem_color_019.png" x="688" y="393" width="52" height="68"/>
-    <SubTexture name="genericItem_color_020.png" x="376" y="278" width="94" height="128"/>
+    <SubTexture name="axe" x="376" y="278" width="94" height="128"/>
     <SubTexture name="genericItem_color_021.png" x="134" y="1360" width="123" height="154"/>
     <SubTexture name="genericItem_color_022.png" x="464" y="534" width="87" height="162"/>
     <SubTexture name="genericItem_color_023.png" x="269" y="456" width="104" height="176"/>
