@@ -21,6 +21,8 @@ import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
 import com.last.commit.stages.InventoryStage
+import com.last.commit.audio.GameSoundEffect
+import com.last.commit.audio.GameMusic
 import kotlin.math.floor
 
 /** First screen of the application. Displayed after the application is created. */
@@ -59,6 +61,7 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
         shapeRenderer.setAutoShapeType(true)
 
         Gdx.input.setInputProcessor(this)
+        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.5f)
     }
 
     fun loadGameConfig(): GameConfig {
