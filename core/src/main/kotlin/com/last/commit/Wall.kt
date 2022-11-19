@@ -17,12 +17,12 @@ open class Wall(var gridX: Int, var gridY: Int, wallCollider: Rectangle, cell: C
     }
 
     fun collidesWidth(collidable: Collidable): Boolean {
-        return if (isCollidable) {
+        return if (isColidable) {
             wallCollider.overlaps(collidable.getCollider())
         } else false
     }
 
-    open val isCollidable: Boolean
+    open val isColidable: Boolean
         get() = true
 
     override fun toString(): String {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.last.commit.config.PlayerSettings
 import com.last.commit.inventory.Inventory
 
 
@@ -14,6 +15,7 @@ class Player(private val textureRegion: TextureRegion) : Collidable {
     private var direction = Vector2.Zero
     private val movementSpeed = 200f
     private val interactionRange = 60f
+    private val settings = PlayerSettings()
 
     val inventory = Inventory()
 
