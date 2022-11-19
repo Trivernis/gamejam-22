@@ -1,5 +1,7 @@
 package com.last.commit.map
 
+import GameState
+import Position
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -10,15 +12,13 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.utils.Array
 import com.last.commit.Collidable
 import com.last.commit.Player
 import com.last.commit.Wall
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItemTextureLoader
-import Position
-import GameState
 
 
 class TimeMap(fileName: String, val state: GameState) {
@@ -29,8 +29,8 @@ class TimeMap(fileName: String, val state: GameState) {
     private val doors = Array<Door>()
     private val collectibles = Array<Collectible>()
     val mapLoader: TmxMapLoader = TmxMapLoader()
-    var mapRenderer: OrthogonalTiledMapRenderer
-    var map: TiledMap
+    lateinit var mapRenderer: OrthogonalTiledMapRenderer
+    lateinit var map: TiledMap
     var gridWidth = 0
     var gridHeight = 0
     var width = 0
@@ -44,12 +44,17 @@ class TimeMap(fileName: String, val state: GameState) {
 
 
     init {
-        map = mapLoader.load(fileName)
-        mapRenderer = OrthogonalTiledMapRenderer(map)
+        loadMap(fileName)
         loadDimensions()
         loadWalls()
         loadCollectibles()
         this.textureLoader.parse()
+    }
+
+    private fun loadMap(fileName: String) {
+        println("Loading map $fileName")
+        map = mapLoader.load(fileName)
+        mapRenderer = OrthogonalTiledMapRenderer(map)
     }
 
     fun teleport(player: Player) {
@@ -60,8 +65,7 @@ class TimeMap(fileName: String, val state: GameState) {
                     state.soundEngine.play(GameSoundEffect.TIME_TRAVEL)
                     val targetMap = teleporter.properties.get("target", String::class.java)
                     System.out.println("Teleporting to targetMap $targetMap")
-                    map = mapLoader.load("tiled/$targetMap")
-                    mapRenderer.map = map
+                    loadMap("tiled/$targetMap")
                     loadDimensions()
                     loadWalls()
                     loadCollectibles()
@@ -98,7 +102,7 @@ class TimeMap(fileName: String, val state: GameState) {
 
         if (prop.containsKey("description")) {
             this.description = prop.get("description", String::class.java)
-        }  else {
+        } else {
             this.description = "Unknown time"
         }
         this.state.mapDescription = this.description
@@ -203,7 +207,7 @@ class TimeMap(fileName: String, val state: GameState) {
     fun render(batch: SpriteBatch, camera: OrthographicCamera, delta: Float) {
         mapRenderer.setView(camera)
         mapRenderer.render()
-        this.collectibles.forEach { coll -> 
+        this.collectibles.forEach { coll ->
             val image = Image(textureLoader.getTexture(coll.name))
             image.x = coll.pos.x + this.getTileWidth() * 0.1f
             image.y = coll.pos.y + this.getTileHeight() * 0.1f
