@@ -5,5 +5,6 @@ import com.last.commit.audio.SoundEngine
 data class GameState(
     val inventory: Inventory,
     val settings: GameSettings,
-    public val soundEngine: SoundEngine,
+    val soundEngine: SoundEngine,
+    var mapDescription: String = "2020"
 )

@@ -20,7 +20,7 @@ import com.last.commit.config.ActionCommand
 import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
-import com.last.commit.stages.InventoryStage
+import com.last.commit.stages.UIStage
 import kotlin.math.floor
 
 /** First screen of the application. Displayed after the application is created. */
@@ -28,7 +28,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     val gameState = parent.state
 
-    val viewportSize = 800f
+    val viewportSize = 1200f
 
     private var delta = 0.008f
     private var isColliding = false
@@ -44,7 +44,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     val highlightColor = Color(0f, 0f, 1f, 0.5f)
 
-    var inventoryStage: InventoryStage
+    var uiStage: UIStage
 
 
     init {
@@ -57,7 +57,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
         handleRatioChange()
 
-        inventoryStage = InventoryStage("sprites/genericItems_spritesheet_colored", gameState.inventory)
+        uiStage = UIStage("sprites/genericItems_spritesheet_colored", gameState)
         shapeRenderer.setAutoShapeType(true)
 
         player.addItemToInventory("drill")
@@ -68,11 +68,9 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
             openDoor()
         } else if (gameState.settings.getAction(keyCode) == ActionCommand.TIME_TRAVEL) {
             map.teleport(player)
-        } else if (gameState.settings.getAction(keyCode) == ActionCommand.OPEN_INVENTORY) {
-            inventoryStage.visible = !inventoryStage.visible
         } else if (keyCode == Input.Keys.P) {
             gameState.inventory.add("compass")
-            inventoryStage.refresh()
+            uiStage.refresh()
         }
 
         if (gameState.settings.getAction(keyCode) == ActionCommand.OPEN_MENU) {
@@ -119,10 +117,10 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         batch.end()
 
         val interactables = map.getInteractablesAt(player.getAbsoluteDirection())
-        // TODO: auslagern in sperate Methode
         renderInteractables(interactables)
 
-        inventoryStage.draw()
+        uiStage.act(delta)
+        uiStage.draw()
     }
 
     fun renderInteractables(interactables: List<Interactable>) {
@@ -243,7 +241,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     override fun resize(width: Int, height: Int) {
         // Resize your screen here. The parameters represent the new window size.
-        inventoryStage.resize(width, height)
+        uiStage.resize(width, height)
         handleRatioChange()
     }
 

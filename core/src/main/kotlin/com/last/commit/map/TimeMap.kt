@@ -36,6 +36,8 @@ class TimeMap(fileName: String, val state: GameState) {
     var mapTileHeight = 0
     var halfMapTileWidth = 0f
     var halfMapTileHeight = 0f
+    var description: String = "2020"
+        private set
 
 
     init {
@@ -89,6 +91,8 @@ class TimeMap(fileName: String, val state: GameState) {
         val prop = map.properties
         this.gridWidth = prop.get("width", Int::class.java)
         this.gridHeight = prop.get("height", Int::class.java)
+        this.description = prop.get("description", String::class.java)
+        this.state.mapDescription = this.description
         this.width = gridWidth * CELL_SIZE
         this.height = gridHeight * CELL_SIZE
         this.mapTileWidth = map.properties.get("tilewidth", Int::class.java)
