@@ -16,6 +16,7 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
     private var direction = Vector2.Zero
     private val movementSpeed = 200f
     private val interactionRange = 60f
+    private var lastStep = 0L
 
     init {
         val size = Math.max(textureRegion.regionWidth, textureRegion.regionHeight).toFloat()
@@ -36,8 +37,15 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
     }
 
     fun move(v: Vector2, delta: Float) {
-        updatePosition(v, delta)
-        updateCollider()
+        if (v.x != 0f || v.y != 0f) {   
+            updatePosition(v, delta)
+            updateCollider()
+
+            if (System.currentTimeMillis() - lastStep > 500) {
+                gameState.soundEngine.play(GameSoundEffect.STEPS_INDOOR, 0.5f)
+                lastStep = System.currentTimeMillis()
+            }
+        }
     }
 
     private fun updatePosition(v: Vector2, delta: Float) {
