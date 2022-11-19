@@ -14,5 +14,6 @@ public class GameSoundEffect(name: String): GameSound(name) {
         val DOOR_OPEN = GameSoundEffect("door_open.mp3")
         val DOOR_CLOSE = GameSoundEffect("door_close.mp3")
         val TIME_TRAVEL = GameSoundEffect("time_travel.mp3")
+        val GRAB = GameSoundEffect("grab.mp3")
     }
 }

@@ -1,6 +1,7 @@
 package com.last.commit.map
 
 import com.badlogic.gdx.math.Rectangle
+import com.last.commit.audio.GameSoundEffect
 import Position
 import GameState
 
@@ -21,6 +22,7 @@ class Collectible(
 
     override fun interact(otherCollider: Rectangle, state: GameState) {
         println("Interacting with item $name")
+        state.soundEngine.play(GameSoundEffect.GRAB)
         state.inventory.add(this.name)
     }
 
