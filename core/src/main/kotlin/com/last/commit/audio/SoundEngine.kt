@@ -10,7 +10,7 @@ import com.last.commit.audio.GameMusic
 public class SoundEngine {
 
     private val sounds: HashMap<String, Sound> = HashMap()
-    private var playingMusic: Music? = null
+    private val musicTracks: HashMap<String, Music> = HashMap()
     
     public fun play(gameSound: GameSound, volume: Float = 1f) {
         if (gameSound is GameSoundEffect) {
@@ -18,14 +18,11 @@ public class SoundEngine {
             sound.play(volume)
             println("Playing sound ${gameSound.name}")
         } else if (gameSound is GameMusic) {
-            if (playingMusic != null && playingMusic!!.isPlaying()) {
-                playingMusic!!.stop()
-            }
             val music = loadMusic(gameSound.name)
+            music.stop()
             music.volume = volume
             music.setLooping(true)
             music.play()
-            playingMusic = music
         }
     }
     
@@ -34,7 +31,13 @@ public class SoundEngine {
     }
 
     private fun loadMusic(name: String): Music {
-        return Gdx.audio.newMusic(Gdx.files.internal("sounds/music/$name"))
+        var music = musicTracks.get(name)
+        if (music == null) {
+            println("Loading sound $name")
+            music =  Gdx.audio.newMusic(Gdx.files.internal("sounds/music/$name"))
+            musicTracks[name] = music
+        }
+        return music!!
     }
 
     private fun loadSound(name: String): Sound {
