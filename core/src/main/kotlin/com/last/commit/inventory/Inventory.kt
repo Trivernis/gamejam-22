@@ -3,7 +3,7 @@ package com.last.commit.inventory
 class Inventory {
 
     val items: MutableList<InventoryItem> = ArrayList()
-    val textureLoader = InventoryItemTextureLoader()
+    val textureLoader = InventoryItemTextureLoader("sprites/genericItems_spritesheet_colored")
 
     init {
         textureLoader.parse()

@@ -43,7 +43,7 @@ class FirstScreen : Screen, InputProcessor {
         this.spawnPlayer()
         this.updateCamera()
 
-        player.addItemToInventory("genericItem_color_001.png")
+        player.addItemToInventory("drill")
         inventoryStage = InventoryStage(player.inventory)
 
         Gdx.input.setInputProcessor(this)
