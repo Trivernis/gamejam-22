@@ -484,7 +484,7 @@
  <objectgroup id="10" name="Teleporter">
   <object id="2" x="1664" y="1856" width="192" height="128">
    <properties>
-    <property name="target" value="demo.tmx"/>
+    <property name="target" value="herbst.tmx"/>
    </properties>
   </object>
  </objectgroup>
