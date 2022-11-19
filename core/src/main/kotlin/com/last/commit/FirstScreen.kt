@@ -252,14 +252,16 @@ class FirstScreen(val gameState: GameState) : Screen, InputProcessor {
     }
 
     override fun keyTyped(character: Char): Boolean {
-        if (character == 'e') {
+        val keyCode = character.code
+
+        if (game.settings.isInteractPressed(keyCode)) {
             openDoor()
-        } else if (character == 't') {
+        } else if (game.settings.isTimeTravelPressed(keyCode)) {
             map.teleport(player)
-        } else if (character == 'i') {
+        } else if (game.settings.isOpenInventoryPressed(keyCode)) {
             inventoryStage.visible = !inventoryStage.visible
         } else if (character == 'p') {
-            gameState.inventory.add("compass")
+            player.inventory.add("compass")
             inventoryStage.refresh()
         }
         return false

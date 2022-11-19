@@ -9,11 +9,14 @@ class Game : Game() {
 
     private lateinit var state: GameState
 
+    var settings = PlayerSettings()
+
     override fun create() {
+        setScreen(FirstScreen(this))
         createState()
         setScreen(FirstScreen(state))
     }
-    
+
     fun createState() {
         state = GameState(
             Inventory()
