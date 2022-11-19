@@ -127,12 +127,14 @@ class TimeMap(fileName: String) {
         for (mapObject in collectibleMapObjects) {
             val mapObjectProperties = mapObject.properties
             val x = mapObjectProperties.get("x", Float::class.java)
+            val gridX = Math.round(x / mapTileWidth)
             val y = mapObjectProperties.get("y", Float::class.java)
+            val gridY = Math.round(y / mapTileHeight)
             val width = mapObjectProperties.get("width", Float::class.java)
             val height = mapObjectProperties.get("height", Float::class.java)
             if (mapObject is RectangleMapObject) {
                 val itemName = mapObjectProperties.get("item", String::class.java)
-                this.collectibles.add(Collectible(itemName, x, y, width, height))
+                this.collectibles.add(Collectible(itemName, x, y, gridX, gridY, width, height))
             } else {
                 println("Found non-rectangular map object at ${x}-${y} skipping it")
             }
@@ -140,30 +142,31 @@ class TimeMap(fileName: String) {
         println("Loaded ${collectibles.size} collectibles")
     }
 
-    private fun findDoorByGridPosition(gridX: Int, gridY: Int): Door? {
+    private fun findInteractableAtPosition(gridX: Int, gridY: Int): Interactable? {
         for (door in doors) {
             if (door.gridX == gridX && door.gridY == gridY && door is Door) {
                 return door
             }
         }
+        for (collectible in collectibles) {
+            if (collectible.gridX == gridX && collectible.gridY == gridY) {
+                return collectible
+            }
+        }
         return null
     }
 
-    fun toggleDoorAt(x: Float, y: Float, blockingCollider: Rectangle?) {
+    fun interactWith(x: Float, y: Float, blockingCollider: Rectangle) {
         val gridX = x.toInt() / CELL_SIZE
         val gridY = y.toInt() / CELL_SIZE
-        println("Toggling door at $gridX:$gridY")
-        val door: Door = this.findDoorByGridPosition(gridX, gridY) ?: return
-        if (door.isClosed) {
-            door.isOpen = true
-        } else if (door.isOpen) {
-            if (door.getCollider().overlaps(blockingCollider)) {
-                // can't close the door cause it is colliding with given collider
-            } else {
-                door.isOpen = false
-            }
-        }
-        println("Door is now open = ${door.isOpen}")
+        println("Interacting with element at $gridX:$gridY")
+
+        //if no door is found return
+        val door: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
+        //else continue
+
+        door.interact(blockingCollider)
+
     }
 
 

@@ -7,9 +7,19 @@ import com.last.commit.Wall
 
 class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
     Wall(gridX, gridY, wallCollider, cell), Interactable {
-    override fun interact() {
-        println("Toggling door $this")
-        isOpen = !isOpen
+    override fun interact(otherCollider: Rectangle) {
+        println("interacting with door $this")
+        if (isClosed) {
+            isOpen = true
+        } else if (isOpen) {
+            if (getCollider().overlaps(otherCollider)) {
+                // can't close the door cause it is colliding with given collider
+            } else {
+                isOpen = false
+            }
+        }
+
+        println("Door is now open = $isOpen")
     }
 
     var isOpen: Boolean
