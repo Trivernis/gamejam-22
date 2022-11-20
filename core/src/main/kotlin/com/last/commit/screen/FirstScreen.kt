@@ -1,7 +1,6 @@
 package com.last.commit.screen
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -65,18 +64,20 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
 
     }
+
     override fun handleKeyInput(action: ActionCommand) {
         if (!pause) {
             when (action) {
                 ActionCommand.INTERACT -> {
                     openDoor()
                 }
+
                 ActionCommand.TIME_TRAVEL -> {
                     map.teleport(player)
                 }
+
                 else -> {}
             }
-            println(action)
             if (action == ActionCommand.OPEN_MENU) {
                 //Gdx.app.exit()
                 parent.changeScreen(Screens.MAIN_MENU)
@@ -89,10 +90,8 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         if (!pause) {
 
             val mouseCoordinates: Vector2 = toWorldCoordinates(screenX.toFloat(), screenY.toFloat())
-            println("Mouse World coordinates is ${mouseCoordinates.x}:${mouseCoordinates.y}")
             val playerDirection: Vector2 = player.getAbsoluteDirection()
 
-            println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
             map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
         }
     }
@@ -140,10 +139,10 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
         for (interactable in interactables) {
             shapeRenderer.rect(
-                    interactable.getCollider().x,
-                    interactable.getCollider().y,
-                    interactable.getCollider().width,
-                    interactable.getCollider().height
+                interactable.getCollider().x,
+                interactable.getCollider().y,
+                interactable.getCollider().width,
+                interactable.getCollider().height
             )
         }
         shapeRenderer.end()
@@ -152,7 +151,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     private fun getMousePosition(): Vector2 {
         val unprojectedMousePosition =
-                camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
+            camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
         return Vector2(unprojectedMousePosition.x, unprojectedMousePosition.y)
     }
 
@@ -165,7 +164,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         this.player.setPosition(playerX, playerY)
     }
 
-    private fun handleInput(delta : Float) {
+    private fun handleInput(delta: Float) {
         val horizontalMovement = Vector2()
         if (isKeyPressed(gameState.settings.getKeyCode(ActionCommand.LEFT))) {
             horizontalMovement.sub(Vector2.X)
@@ -199,7 +198,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         }
     }
 
-    private fun isKeyPressed(keyCodes: List<Int>): Boolean{
+    private fun isKeyPressed(keyCodes: List<Int>): Boolean {
         for (key in keyCodes) {
             if (Gdx.input.isKeyPressed(key)) {
                 return true
@@ -229,20 +228,20 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         val mapHeight: Int = map.height
 
         cX = if (playerXPosition < halfScreenWidth) {
-                halfScreenWidth
-            } else if (playerXPosition > mapWidth - halfScreenWidth) {
-                mapWidth - halfScreenWidth
-            } else {
-                playerXPosition
-            }
+            halfScreenWidth
+        } else if (playerXPosition > mapWidth - halfScreenWidth) {
+            mapWidth - halfScreenWidth
+        } else {
+            playerXPosition
+        }
 
         cY = if (playerYPosition < halfScreenHeight) {
-                halfScreenHeight
-            } else if (playerYPosition > mapHeight - halfScreenHeight) {
-                mapHeight - halfScreenHeight
-            } else {
-                playerYPosition
-            }
+            halfScreenHeight
+        } else if (playerYPosition > mapHeight - halfScreenHeight) {
+            mapHeight - halfScreenHeight
+        } else {
+            playerYPosition
+        }
 
         camera.position[cX, cY] = 0f
         camera.update()
@@ -295,15 +294,14 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     fun openDoor() {
         println("Attempt to toggle door")
         val playerDirection: Vector2 = player.getAbsoluteDirection()
-        println("Player interactor is ${playerDirection.x}:${playerDirection.y}")
         map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
     }
 
     fun toWorldCoordinates(x: Float, y: Float): Vector2 {
         val mouseInWorldPosition = camera.unproject(Vector3(x, y, 0f))
         return Vector2(
-                floor(mouseInWorldPosition.x.toDouble() / this.map.getTileWidth()).toFloat(),
-                floor(mouseInWorldPosition.y.toDouble() / this.map.getTileHeight()).toFloat()
+            floor(mouseInWorldPosition.x.toDouble() / this.map.getTileWidth()).toFloat(),
+            floor(mouseInWorldPosition.y.toDouble() / this.map.getTileHeight()).toFloat()
         )
     }
 

@@ -1,23 +1,19 @@
 package com.last.commit.map
 
+import GameState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.Collidable
 import com.last.commit.Player
-import com.last.commit.Wall
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItemTextureLoader
-import GameState
 
 
 class TimeMap(fileName: String, val state: GameState) {
@@ -33,7 +29,7 @@ class TimeMap(fileName: String, val state: GameState) {
     val gridWidth: Int
         get() = mapState.gridSize.x.toInt()
 
-    val gridHeight: Int 
+    val gridHeight: Int
         get() = mapState.gridSize.y.toInt()
 
     val width: Int
@@ -56,12 +52,12 @@ class TimeMap(fileName: String, val state: GameState) {
         mapRenderer = OrthogonalTiledMapRenderer(map)
         this.textureLoader.parse()
     }
-    
+
 
     fun teleport(player: Player) {
         val teleporter = mapState.teleporters.find {
             it.rectangle.contains(player.getX(), player.getY())
-        }        
+        }
         if (teleporter != null) {
             state.soundEngine.play(GameSoundEffect.TIME_TRAVEL)
             val targetMap = teleporter.properties.get("target", String::class.java)
@@ -120,7 +116,6 @@ class TimeMap(fileName: String, val state: GameState) {
     fun interactWith(x: Float, y: Float, blockingCollider: Rectangle) {
         val gridX = x.toInt() / CELL_SIZE
         val gridY = y.toInt() / CELL_SIZE
-        println("Interacting with element at $gridX:$gridY")
 
         //if no door is found return
         val interactable: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
@@ -141,7 +136,7 @@ class TimeMap(fileName: String, val state: GameState) {
     fun render(batch: SpriteBatch, camera: OrthographicCamera, delta: Float) {
         mapRenderer.setView(camera)
         mapRenderer.render()
-        this.mapState.collectibles.forEach { coll -> 
+        this.mapState.collectibles.forEach { coll ->
             val image = Image(textureLoader.getTexture(coll.name))
             image.x = coll.pos.x + this.getTileWidth() * 0.1f
             image.y = coll.pos.y + this.getTileHeight() * 0.1f

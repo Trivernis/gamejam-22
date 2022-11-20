@@ -7,17 +7,16 @@ import com.badlogic.gdx.audio.Sound
 public class SoundEngine {
 
     private val sounds: ThreadLocal<HashMap<String, Sound>> =
-            ThreadLocal.withInitial() { HashMap() }
+        ThreadLocal.withInitial() { HashMap() }
     private val musicTracks: ThreadLocal<HashMap<String, Music>> =
-            ThreadLocal.withInitial() { HashMap() }
+        ThreadLocal.withInitial() { HashMap() }
 
-    lateinit var backgroundMusic : Music
+    lateinit var backgroundMusic: Music
 
     fun play(gameSound: GameSound, volume: Float = 1f) {
         if (gameSound is GameSoundEffect) {
             val sound = loadEffect(gameSound.name)
             sound.play(volume)
-            println("Playing sound ${gameSound.name}")
         } else if (gameSound is GameMusic) {
             backgroundMusic = loadMusic(gameSound.name)
             backgroundMusic.volume = volume
@@ -30,7 +29,7 @@ public class SoundEngine {
         backgroundMusic.pause()
     }
 
-    fun resume()  {
+    fun resume() {
         backgroundMusic.play()
     }
 
