@@ -43,7 +43,6 @@ class Settings(val parent: Game) : TimeTravelScreen() {
         volumeMusicSlider = Slider(0f, 1f, 0.1f, false, skin)
         volumeMusicSlider.value = parent.state.settings.musicVolume
         volumeMusicSlider.addListener {
-            println("volume slide ${volumeMusicSlider.value}")
             parent.state.settings.musicVolume = volumeMusicSlider.value
             // updateVolumeLabel();
             false
@@ -54,7 +53,6 @@ class Settings(val parent: Game) : TimeTravelScreen() {
         sfxMusicSlider.value = parent.state.settings.sfxVolume
         sfxMusicSlider.addListener {
 
-            println("volume sfx :${sfxMusicSlider.value}")
             parent.state.settings.sfxVolume = sfxMusicSlider.value
             // updateVolumeLabel();
             false

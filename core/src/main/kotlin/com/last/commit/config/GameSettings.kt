@@ -47,11 +47,7 @@ class GameSettings() {
         set(newValue: Float) {
             field = newValue
 
-            println("settings volume sfx :$sfxVolume")
             soundEngin?.volumeSfx = sfxVolume
-            soundEngin?. let {
-                println("soundengine volume sfx :$sfxVolume")
-            }
         }
 
 
