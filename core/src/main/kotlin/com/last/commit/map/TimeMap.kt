@@ -46,7 +46,7 @@ class TimeMap(fileName: String, val state: GameState) {
 
     init {
         map = mapLoader.load(fileName)
-        mapState = MapState(map)
+        mapState = MapState(map, textureLoader)
         state.map = mapState
         mapStates[fileName] = mapState
         mapRenderer = OrthogonalTiledMapRenderer(map)
@@ -74,7 +74,7 @@ class TimeMap(fileName: String, val state: GameState) {
         } else {
             val map = mapLoader.load(name)
             mapRenderer.map = map
-            mapState = MapState(map)
+            mapState = MapState(map, textureLoader)
             mapStates[name] = mapState
         }
         state.map = mapState

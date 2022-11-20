@@ -1,29 +1,29 @@
 package com.last.commit.map
 
-import com.last.commit.map.Collectible
-import com.last.commit.map.Door
-import com.last.commit.Wall
-import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.math.Rectangle
-import kotlin.math.round;
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.last.commit.Wall
+import com.last.commit.inventory.InventoryItemTextureLoader
+import kotlin.math.round
 
-class MapState(val map: TiledMap) {
+class MapState(val map: TiledMap, val textureLoader: InventoryItemTextureLoader) {
     private val CELL_SIZE = 64
 
     val size: Vector2
     val gridSize: Vector2
-    val tileSize: Vector2    
+    val tileSize: Vector2
     val description: String?
 
     val collectibles: ArrayList<Collectible> = ArrayList()
     val teleporters: ArrayList<RectangleMapObject> = ArrayList()
     val walls: ArrayList<Wall> = ArrayList()
     val doors: ArrayList<Door> = ArrayList()
-    
+
     init {
         val prop = map.properties
         val gridWidth = prop.get("width", Int::class.java)
@@ -50,8 +50,8 @@ class MapState(val map: TiledMap) {
             println("No Teleporters defined!")
         }
     }
-    
-    private fun loadCollectibles() {        
+
+    private fun loadCollectibles() {
         val collectiableLayer = map.layers["Collectibles"]
         if (collectiableLayer == null) {
             println("Could not load collectibles layer. Check map.")
@@ -62,7 +62,7 @@ class MapState(val map: TiledMap) {
 
         println("Loaded ${collectibles.size} collectibles")
     }
-    
+
     private fun createCollectible(obj: MapObject): Collectible? {
         val x = obj.properties.get("x", Float::class.java)
         val y = obj.properties.get("y", Float::class.java)
@@ -72,13 +72,18 @@ class MapState(val map: TiledMap) {
         val width = obj.properties.get("width", Float::class.java)
         val height = obj.properties.get("height", Float::class.java)
         val size = Vector2(width, height)
-        
+
         return if (obj is RectangleMapObject) {
             val itemName: String? = obj.properties.get("item", String::class.java)
             val requiredItem = obj.properties.get("requiredItem", String::class.java) ?: ""
 
             if (itemName != null) {
-                 Collectible(itemName, Position(coords, gridCoords), size, requiredItem)
+                val image = Image(textureLoader.getTexture(itemName))
+                image.x = coords.x + tileSize.x * 0.1f
+                image.y = coords.y + tileSize.y * 0.1f
+                image.width = tileSize.x * 0.8f
+                image.height = tileSize.y * 0.8f
+                Collectible(itemName, Position(coords, gridCoords), size, requiredItem, image)
             } else {
                 null
             }
@@ -94,14 +99,17 @@ class MapState(val map: TiledMap) {
 
         for (column in 0 until wallsLayer.width) {
             for (row in 0 until wallsLayer.height) {
-                val cell = wallsLayer.getCell(column, row)?: continue
-                val isDoor: Boolean = cell.getTile().getProperties().get("isDoor", false, Boolean::class.java)
+                val cell = wallsLayer.getCell(column, row) ?: continue
+                val isDoor: Boolean =
+                        cell.getTile().getProperties().get("isDoor", false, Boolean::class.java)
 
-                val wallCollider = Rectangle(
-                    column.toFloat() * wallsLayer.tileWidth,
-                    row.toFloat() * wallsLayer.tileHeight, wallsLayer.tileWidth.toFloat(),
-                    wallsLayer.tileHeight.toFloat()
-                )
+                val wallCollider =
+                        Rectangle(
+                                column.toFloat() * wallsLayer.tileWidth,
+                                row.toFloat() * wallsLayer.tileHeight,
+                                wallsLayer.tileWidth.toFloat(),
+                                wallsLayer.tileHeight.toFloat()
+                        )
                 if (java.lang.Boolean.TRUE == isDoor) {
                     doors.add(Door(column, row, wallCollider, cell))
                 } else {
@@ -110,5 +118,4 @@ class MapState(val map: TiledMap) {
             }
         }
     }
-
 }

@@ -123,7 +123,12 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     }
 
     override fun render(delta: Float) {
-        if (!pause) {
+        if (gameState.inventory.checkVictoryCondition()) {
+            gameState.dialogStage.show()
+            gameState.dialogStage.act(delta)
+            gameState.dialogStage.setTexts("You won!")
+            gameState.dialogStage.draw()
+        } else if (!pause) {
             uiStage.act(delta)
             gameState.dialogStage.act(delta)
             handleInput(delta)

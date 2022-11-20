@@ -13,6 +13,7 @@ class InventoryItemTextureLoader(path: String) {
     private val textureMapping: FileHandle
     private lateinit var subTextures: Array<XmlReader.Element>
     private val textures: HashMap<String, TextureRegion> = HashMap()
+    private var initialized: Boolean = false
 
     init {
         itemsSpriteSheet = Texture("${path}.png")
@@ -20,6 +21,9 @@ class InventoryItemTextureLoader(path: String) {
     }
 
     fun getTexture(itemName: String): TextureRegion {
+        if (!initialized) {
+            this.parse()
+        }
         var itemTexture = textures.get(itemName)
 
         if (itemTexture == null) {
@@ -39,5 +43,6 @@ class InventoryItemTextureLoader(path: String) {
         val textureAtlasElement = xml.parse(textureMapping)
         this.subTextures = textureAtlasElement.getChildrenByName("SubTexture")
         println("Found ${subTextures.size} textures")
+        this.initialized = true
     }
 }

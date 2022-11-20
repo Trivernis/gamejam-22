@@ -5,7 +5,8 @@ import com.last.commit.GameState
 class Inventory() {
 
     val items: MutableList<InventoryItem> = ArrayList()
-    public var updated = false
+    var updated = false
+    private val requiredItems = listOf("ram", "iphone", "ipod", "screwdriver")
 
     /**
      * @param name the name of the subtexture loaded from xml
@@ -29,5 +30,11 @@ class Inventory() {
 
     fun remove(name: String) {
         items.removeIf() { item -> item.name == name }
+    }
+    
+    fun checkVictoryCondition(): Boolean {
+        return requiredItems.all {itemName ->
+            items.find { it.name == itemName } != null
+        }
     }
 }
