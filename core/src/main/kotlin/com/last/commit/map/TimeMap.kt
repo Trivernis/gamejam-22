@@ -63,7 +63,7 @@ class TimeMap(fileName: String, val state: GameState) {
             System.out.println("Teleporting to targetMap $targetMap")
             loadMap("tiled/$targetMap")
             val mapDescription = mapState.description
-            state.dialogStage.setTexts("You teleported to $mapDescription")
+            state.dialogStage.setTexts(4000L, "You teleported to $mapDescription")
             state.dialogStage.show()
         }
     }

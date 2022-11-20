@@ -4,24 +4,34 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 
-public class SoundEngine {
+public class SoundEngine(private val sfx: Float, private val music: Float) {
+
+
+    var volumeSfx = sfx
+    var volumeMusic = music
+        set(newValue) {
+            field = newValue
+            resume()
+        }
 
     private val sounds: ThreadLocal<HashMap<String, Sound>> =
         ThreadLocal.withInitial() { HashMap() }
     private val musicTracks: ThreadLocal<HashMap<String, Music>> =
         ThreadLocal.withInitial() { HashMap() }
 
-    lateinit var backgroundMusic: Music
+    var backgroundMusic: Music
 
-    fun play(gameSound: GameSound, volume: Float = 1f) {
+    init {
+        backgroundMusic = loadMusic("world_music.mp3")
+    }
+
+    fun play(gameSound: GameSound, ) {
         if (gameSound is GameSoundEffect) {
             val sound = loadEffect(gameSound.name)
-            sound.play(volume)
+            sound.play(volumeSfx)
         } else if (gameSound is GameMusic) {
-            backgroundMusic = loadMusic(gameSound.name)
-            backgroundMusic.volume = volume
             backgroundMusic.setLooping(true)
-            backgroundMusic.play()
+            resume()
         }
     }
 
@@ -30,9 +40,11 @@ public class SoundEngine {
     }
 
     fun resume() {
-        backgroundMusic.play()
+        backgroundMusic.volume = volumeMusic
+        if (!backgroundMusic.isPlaying) {
+            backgroundMusic.play()
+        }
     }
-
     private fun loadEffect(name: String): Sound {
         return loadSound("effects/$name")
     }

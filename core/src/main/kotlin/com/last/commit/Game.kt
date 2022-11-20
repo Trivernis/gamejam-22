@@ -52,10 +52,13 @@ class Game : Game() {
     }
 
     fun createState() {
+        val settings =  GameSettings()
+        val soundEngine = SoundEngine(settings.sfxVolume, settings.musicVolume)
+        settings.soundEngin = soundEngine
         state = GameState(
             Inventory(),
-            GameSettings(),
-            SoundEngine(),
+            settings,
+            soundEngine,
             TimeTravelAssetManager(),
             null,
             DialogStage(Skin(Gdx.files.internal("ui/uiskin.json")))

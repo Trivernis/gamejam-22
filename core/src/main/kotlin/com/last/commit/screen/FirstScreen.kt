@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.badlogic.gdx.utils.viewport.FillViewport
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.last.commit.Game
 import com.last.commit.Player
 import com.last.commit.audio.GameMusic
@@ -24,6 +25,7 @@ import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
 import com.last.commit.stages.UIStage
+import com.last.commit.stages.PromptStage
 import kotlin.math.floor
 
 /** First screen of the application. Displayed after the application is created. */
@@ -48,8 +50,8 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     val highlightColor = Color(0f, 0f, 1f, 0.5f)
 
-    var pause = true
     var uiStage: UIStage
+    val promptStage: PromptStage
 
 
     init {
@@ -63,18 +65,42 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         uiStage = UIStage("sprites/genericItems_spritesheet_colored", gameState)
         shapeRenderer.setAutoShapeType(true)
 
-        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
+        promptStage = PromptStage(Skin(Gdx.files.internal("ui/uiskin.json")))
+        promptStage.addText("""  
+        You are stranded in time.
+        The time traveling device you carry with you cannot be controlled anymore.
+        """.trimIndent())
+        promptStage.addText("""
+        You need to find the tools required to fix your time traveling device.
+        Look around the map to find them.
+        """.trimIndent())
+        promptStage.addText("""
+        You can use <W>, <A>, <S> and <D> to walk around the map.
+        """.trimIndent())
+        promptStage.addText("""
+        Doors can be opened and items picked up with <E>.
+        Some doors require keys to be opened.
+        """)
+        promptStage.addText("""
+        At some locations you can press <T> to travel to a random spot in time.
+        The top left indicates where you traveled to.
+        """.trimIndent())
+        promptStage.addText("""
+        Some items can only be collected in certain time locations.
+        A collectible item will be highlighted when hovering over it using the mouse
+        """.trimIndent())
+        promptStage.visible = true
 
         viewport.camera = camera
         viewport.apply()
     }
 
     override fun getInputProcessors(): Array<InputProcessor> {
-        return arrayOf(gameState.dialogStage)
+        return arrayOf(gameState.dialogStage, promptStage)
     }
 
     override fun handleKeyInput(action: ActionCommand) {
-        if (!pause) {
+
             when (action) {
                 ActionCommand.INTERACT -> {
                     openDoor()
@@ -95,22 +121,20 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
                 //Gdx.app.exit()
                 parent.changeScreen(Screens.MAIN_MENU)
             }
-        }
+
 
     }
 
     override fun handleMouseInput(screenX: Int, screenY: Int, pointer: Int, button: Int) {
-        if (!pause) {
 
             val mouseCoordinates: Vector2 = toWorldCoordinates(screenX.toFloat(), screenY.toFloat())
             val playerDirection: Vector2 = player.getAbsoluteDirection()
 
             map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
-        }
     }
 
     override fun show() {
-        // Prepare your screen here.
+
 
         resume()
     }
@@ -124,15 +148,20 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     override fun render(delta: Float) {
         if (gameState.inventory.checkVictoryCondition()) {
-            gameState.dialogStage.show()
-            gameState.dialogStage.act(delta)
-            gameState.dialogStage.setTexts("You won!")
-            gameState.dialogStage.draw()
-        } else if (!pause) {
+            promptStage.visible = true
+            promptStage.clearText()
+            promptStage.addText("You won!")
+            promptStage.act(delta)
+            promptStage.draw()
+        } else {
             uiStage.act(delta)
             gameState.dialogStage.act(delta)
-            handleInput(delta)
-            handleMapBorderCollision()
+            promptStage.act(delta)
+
+            if (!promptStage.visible) {
+                handleInput(delta)
+                handleMapBorderCollision()
+            }
 
             val mousePosition: Vector2 = getMousePosition()
             player.lookAt(mousePosition)
@@ -149,6 +178,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
             uiStage.draw()
             gameState.dialogStage.draw()
+            promptStage.draw()
             viewport.apply()
             updateCamera()
         }
@@ -259,6 +289,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     override fun resize(width: Int, height: Int) {
         // Resize your screen here. The parameters represent the new window size.
         uiStage.resize(width, height)
+        promptStage.resize(width, height)
         gameState.dialogStage.resize(width, height)
         viewport.update(width, height)
         viewport.apply()
@@ -267,19 +298,18 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
 
     override fun pause() {
-        pause = true
-        gameState.soundEngine.stop()
 
     }
 
     override fun resume() {
-        pause = false
-        gameState.soundEngine.resume();
+        this.viewport.apply()
+        this.updateCamera()
         // Invoked when your application is resumed after pause.
     }
 
     override fun hide() {
-        pause()
+
+        //gameState.soundEngine.stop()
     }
 
     override fun dispose() {
