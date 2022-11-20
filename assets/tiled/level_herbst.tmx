@@ -629,7 +629,11 @@
     <property name="item" value="key"/>
    </properties>
   </object>
-  <object id="7" x="1600" y="2242" width="58" height="56"/>
+  <object id="7" x="1600" y="2242" width="58" height="56">
+   <properties>
+    <property name="item" value="screwdriver"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="8" name="Spawnpoints">
   <object id="1" x="2081" y="2330">
