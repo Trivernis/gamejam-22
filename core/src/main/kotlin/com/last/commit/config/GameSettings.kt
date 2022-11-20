@@ -1,13 +1,26 @@
 package com.last.commit.config
 
 import com.badlogic.gdx.Input.Keys
+import com.badlogic.gdx.Preferences
 import java.util.*
 
 class GameSettings {
 
-    val fullscreen: Boolean = false
     private val actionKeys: EnumMap<ActionCommand, List<Int>> = EnumMap(ActionCommand::class.java)
     private val actionKeysReversed: HashMap<Int, ActionCommand> = hashMapOf()
+
+
+    var musicEnabled: Boolean = true
+    var sfxEnabled: Boolean = true
+
+    var musicVolume: Float = 0.5F
+        set(newValue: Float) {
+            field = valueRegulator(newValue, 1F, 0F) as Float
+        }
+    var sfxVolume: Float = 0.5F
+        set(newValue: Float) {
+            field = valueRegulator(newValue, 1F, 0F) as Float
+        }
 
 
     init {
@@ -19,7 +32,20 @@ class GameSettings {
         actionKeys[ActionCommand.TIME_TRAVEL] = listOf(Keys.T)
         actionKeys[ActionCommand.INTERACT] = listOf(Keys.E)
 
+        musicVolume = 0.5F
+
         setReversed(actionKeys)
+
+    }
+
+    private fun <T> valueRegulator(newValue: T, maxValue: T, minValue: T): T where T : Number, T : Comparable<T>{
+        return if (newValue.compareTo(maxValue) > 0) {
+            maxValue
+        } else if (newValue.compareTo(minValue) < 0) {
+            minValue
+        } else {
+            newValue
+        }
 
     }
 

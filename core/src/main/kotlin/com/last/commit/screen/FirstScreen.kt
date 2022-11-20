@@ -76,19 +76,11 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
                 }
             }
             println(action)
-            println(gameState.settings.getKeyCode(ActionCommand.OPEN_MENU))
             if (action == ActionCommand.OPEN_MENU) {
                 //Gdx.app.exit()
                 parent.changeScreen(Screens.MAIN_MENU)
             }
         }
-        //TODO
-        /*
-        else if (action == Input.Keys.P) {
-            gameState.inventory.add("compass")
-            inventoryStage.refresh()
-        }
-         */
 
     }
 
