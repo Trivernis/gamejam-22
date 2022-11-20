@@ -1,7 +1,5 @@
 package com.last.commit.map
 
-import GameState
-import Position
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -12,67 +10,75 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.Collidable
 import com.last.commit.Player
 import com.last.commit.Wall
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItemTextureLoader
+import GameState
 
 
 class TimeMap(fileName: String, val state: GameState) {
     private val CELL_SIZE = 64
     val textureLoader = InventoryItemTextureLoader("sprites/genericItems_spritesheet_colored")
 
-    private val walls = Array<Wall>()
-    private val doors = Array<Door>()
-    private val collectibles = Array<Collectible>()
     val mapLoader: TmxMapLoader = TmxMapLoader()
-    lateinit var mapRenderer: OrthogonalTiledMapRenderer
-    lateinit var map: TiledMap
-    var gridWidth = 0
-    var gridHeight = 0
-    var width = 0
-    var height = 0
-    var mapTileWidth = 0
-    var mapTileHeight = 0
-    var halfMapTileWidth = 0f
-    var halfMapTileHeight = 0f
-    var description: String = "2020"
-        private set
+    var mapRenderer: OrthogonalTiledMapRenderer
+    var mapState: MapState
+    val mapStates: HashMap<String, MapState> = HashMap()
+    var map: TiledMap
 
+    val gridWidth: Int
+        get() = mapState.gridSize.x.toInt()
+
+    val gridHeight: Int 
+        get() = mapState.gridSize.y.toInt()
+
+    val width: Int
+        get() = mapState.size.x.toInt()
+
+    val height: Int
+        get() = mapState.size.y.toInt()
+
+    val mapTileWidth: Int
+        get() = mapState.tileSize.x.toInt()
+
+    val mapTileHeight: Int
+        get() = mapState.tileSize.y.toInt()
 
     init {
-        loadMap(fileName)
-        loadDimensions()
-        loadWalls()
-        loadCollectibles()
+        map = mapLoader.load(fileName)
+        mapState = MapState(map)
+        mapStates[fileName] = mapState
+        mapRenderer = OrthogonalTiledMapRenderer(map)
         this.textureLoader.parse()
     }
-
-    private fun loadMap(fileName: String) {
-        println("Loading map $fileName")
-        map = mapLoader.load(fileName)
-        mapRenderer = OrthogonalTiledMapRenderer(map)
-    }
+    
 
     fun teleport(player: Player) {
-        val teleporters = map.layers["Teleporter"].objects
-        for (teleporter in teleporters) {
-            if (teleporter is RectangleMapObject) {
-                if (teleporter.rectangle.contains(player.getX(), player.getY())) {
-                    state.soundEngine.play(GameSoundEffect.TIME_TRAVEL)
-                    val targetMap = teleporter.properties.get("target", String::class.java)
-                    System.out.println("Teleporting to targetMap $targetMap")
-                    loadMap("tiled/$targetMap")
-                    loadDimensions()
-                    loadWalls()
-                    loadCollectibles()
-                }
-            } else {
-                println("Found illegal teleporter. ${teleporter.properties.get("id")}")
-            }
+        val teleporter = mapState.teleporters.find {
+            it.rectangle.contains(player.getX(), player.getY())
+        }        
+        if (teleporter != null) {
+            state.soundEngine.play(GameSoundEffect.TIME_TRAVEL)
+            val targetMap = teleporter.properties.get("target", String::class.java)
+            System.out.println("Teleporting to targetMap $targetMap")
+            loadMap("tiled/$targetMap")
+        }
+    }
+
+    private fun loadMap(name: String) {
+        val newState = this.mapStates.get(name)
+        if (newState != null) {
+            mapState = newState
+            mapRenderer.map = mapState.map
+        } else {
+            val map = mapLoader.load(name)
+            mapRenderer.map = map
+            mapState = MapState(map)
+            mapStates[name] = mapState
         }
     }
 
@@ -95,87 +101,13 @@ class TimeMap(fileName: String, val state: GameState) {
         return Vector2.Zero
     }
 
-    private fun loadDimensions() {
-        val prop = map.properties
-        this.gridWidth = prop.get("width", Int::class.java)
-        this.gridHeight = prop.get("height", Int::class.java)
-
-        if (prop.containsKey("description")) {
-            this.description = prop.get("description", String::class.java)
-        } else {
-            this.description = "Unknown time"
-        }
-        this.state.mapDescription = this.description
-        this.width = gridWidth * CELL_SIZE
-        this.height = gridHeight * CELL_SIZE
-        this.mapTileWidth = map.properties.get("tilewidth", Int::class.java)
-        this.mapTileHeight = map.properties.get("tileheight", Int::class.java)
-        this.halfMapTileWidth = mapTileWidth / 2f
-        this.halfMapTileHeight = mapTileHeight / 2f
-    }
-
-    private fun loadWalls() {
-        walls.clear()
-        doors.clear()
-        val wallsLayer = map.layers["Walls"] as TiledMapTileLayer
-
-        for (column in 0 until wallsLayer.width) {
-            for (row in 0 until wallsLayer.height) {
-                val cell: TiledMapTileLayer.Cell? = wallsLayer.getCell(column, row)
-                if (cell != null) {
-                    val isDoor: Boolean = cell.getTile().getProperties().get("isDoor", false, Boolean::class.java)
-                    val wallCollider = Rectangle(
-                        column.toFloat() * wallsLayer.tileWidth,
-                        row.toFloat() * wallsLayer.tileHeight, wallsLayer.tileWidth.toFloat(),
-                        wallsLayer.tileHeight.toFloat()
-                    )
-                    if (java.lang.Boolean.TRUE == isDoor) {
-                        doors.add(Door(column, row, wallCollider, cell))
-                    } else {
-                        walls.add(Wall(column, row, wallCollider, cell))
-                    }
-                }
-            }
-        }
-    }
-
-    fun loadCollectibles() {
-        this.collectibles.clear()
-        val collectiableLayer = map.layers["Collectibles"]
-        if (collectiableLayer == null) {
-            println("Could not load collectibles layer. Check map.")
-            return
-        }
-        val collectibleMapObjects = collectiableLayer.objects
-
-        for (mapObject in collectibleMapObjects) {
-            val mapObjectProperties = mapObject.properties
-            val x = mapObjectProperties.get("x", Float::class.java)
-            val gridX = Math.round(x / mapTileWidth)
-            val y = mapObjectProperties.get("y", Float::class.java)
-            val gridY = Math.round(y / mapTileHeight)
-            val width = mapObjectProperties.get("width", Float::class.java)
-            val height = mapObjectProperties.get("height", Float::class.java)
-
-            if (mapObject is RectangleMapObject) {
-                val itemName = mapObjectProperties.get("item", String::class.java)
-                itemName?. let {
-                    this.collectibles.add(Collectible(itemName, Position(x, y, gridX, gridY), width, height))
-                }
-            } else {
-                println("Found non-rectangular map object at ${x}-${y} skipping it")
-            }
-        }
-        println("Loaded ${collectibles.size} collectibles")
-    }
-
     private fun findInteractableAtPosition(gridX: Int, gridY: Int): Interactable? {
-        for (door in doors) {
-            if (door.gridX == gridX && door.gridY == gridY && door is Door) {
+        for (door in mapState.doors) {
+            if (door.gridX == gridX && door.gridY == gridY) {
                 return door
             }
         }
-        for (collectible in collectibles) {
+        for (collectible in mapState.collectibles) {
             if (collectible.pos.gridX == gridX && collectible.pos.gridY == gridY) {
                 return collectible
             }
@@ -207,7 +139,7 @@ class TimeMap(fileName: String, val state: GameState) {
     fun render(batch: SpriteBatch, camera: OrthographicCamera, delta: Float) {
         mapRenderer.setView(camera)
         mapRenderer.render()
-        this.collectibles.forEach { coll ->
+        this.mapState.collectibles.forEach { coll -> 
             val image = Image(textureLoader.getTexture(coll.name))
             image.x = coll.pos.x + this.getTileWidth() * 0.1f
             image.y = coll.pos.y + this.getTileHeight() * 0.1f
@@ -219,12 +151,12 @@ class TimeMap(fileName: String, val state: GameState) {
 
     fun isCollidingWith(collidable: Collidable): Boolean {
 
-        for (wall in walls) {
+        for (wall in mapState.walls) {
             if (wall.collidesWidth(collidable)) {
                 return true
             }
         }
-        for (door in doors) {
+        for (door in mapState.doors) {
             if (door.collidesWidth(collidable)) {
                 return true
             }
@@ -234,9 +166,9 @@ class TimeMap(fileName: String, val state: GameState) {
 
     fun getInteractablesAt(absoluteDirection: Vector2): List<Interactable> {
         val interactables = ArrayList<Interactable>()
-        val c = collectibles.filter { it.getCollider().contains(absoluteDirection) }
+        val c = mapState.collectibles.filter { it.getCollider().contains(absoluteDirection) }
         interactables.addAll(c)
-        val w = doors.filter { it.getCollider().contains(absoluteDirection) }
+        val w = mapState.doors.filter { it.getCollider().contains(absoluteDirection) }
         interactables.addAll(w)
 
         return interactables

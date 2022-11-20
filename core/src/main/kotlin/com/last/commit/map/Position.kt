@@ -1,3 +1,5 @@
+package com.last.commit.map
+
 import com.badlogic.gdx.math.Vector2
 
 public data class Position(
