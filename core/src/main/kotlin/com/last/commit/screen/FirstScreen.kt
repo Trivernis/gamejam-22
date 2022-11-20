@@ -78,8 +78,11 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         """.trimIndent())
         promptStage.addText("""
         You can use <W>, <A>, <S> and <D> to walk around the map.
-        Some doors require keys to be opened.
         """.trimIndent())
+        promptStage.addText("""
+        Doors can be opened and items picked up with <E>.
+        Some doors require keys to be opened.
+        """)
         promptStage.addText("""
         At some locations you can press <T> to travel to a random spot in time.
         The top left indicates where you traveled to.
@@ -147,9 +150,9 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     override fun render(delta: Float) {
         if (gameState.inventory.checkVictoryCondition()) {
             promptStage.visible = true
-            promptStage.act(delta)
             promptStage.clearText()
             promptStage.addText("You won!")
+            promptStage.act(delta)
             promptStage.draw()
         } else if (!pause) {
             uiStage.act(delta)

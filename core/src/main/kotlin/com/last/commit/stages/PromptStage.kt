@@ -70,6 +70,7 @@ class PromptStage(skin: Skin?): Stage(ExtendViewport(300f, 300f)) {
             val text = text.removeAt(0).trimIndent()
             textArea.text = text
         } else {
+            textArea.text = ""
             visible = false
         }
     }
