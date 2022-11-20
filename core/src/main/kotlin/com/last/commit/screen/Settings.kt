@@ -127,6 +127,7 @@ class Settings(val parent: Game) : TimeTravelScreen() {
     }
 
     override fun resize(width: Int, height: Int) {
+        stage.viewport.update(width, height)
     }
 
     override fun pause() {

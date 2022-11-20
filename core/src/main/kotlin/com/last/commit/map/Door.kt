@@ -1,8 +1,8 @@
 package com.last.commit.map
 
-import GameState
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.math.Rectangle
+import com.last.commit.GameState
 import com.last.commit.Wall
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItem
@@ -17,11 +17,19 @@ class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
 
         val item: InventoryItem? = state.inventory.items.find { it.name == requiredItem }
 
+        val result: Boolean
         if (item == null) {
-            return requiredItem == ""
+            result = requiredItem == ""
         } else {
-            return requiredItem == item.name
+            result = requiredItem == item.name
         }
+
+        if (result) {
+        } else {
+            state.dialogStage.setTexts("This dor is blocked. You need a key")
+            state.dialogStage.show()
+        }
+        return result
     }
 
     override fun interact(otherCollider: Rectangle, state: GameState) {

@@ -1,6 +1,5 @@
 package com.last.commit.map
 
-import GameState
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -11,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.Collidable
+import com.last.commit.GameState
 import com.last.commit.Player
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItemTextureLoader
@@ -121,7 +121,12 @@ class TimeMap(fileName: String, val state: GameState) {
         val interactable: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
         //else continue
 
-        interactable.interact(blockingCollider, state)
+        if (interactable.canInteract(state)) {
+            println("Interacting with element at $gridX:$gridY")
+            interactable.interact(blockingCollider, state)
+        } else {
+            println("Cannot interact with $gridX:$gridY")
+        }
     }
 
 

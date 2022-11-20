@@ -1,7 +1,7 @@
 package com.last.commit.map
 
-import GameState
 import com.badlogic.gdx.math.Rectangle
+import com.last.commit.GameState
 
 interface Interactable {
     fun getCollider(): Rectangle

@@ -1,11 +1,11 @@
 package com.last.commit.stages
 
-import GameState
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.last.commit.GameState
 import com.last.commit.inventory.InventoryItemTextureLoader
 
 class UIStage(path: String, val state: GameState) : Stage() {

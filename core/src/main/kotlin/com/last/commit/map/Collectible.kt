@@ -1,8 +1,8 @@
 package com.last.commit.map
 
-import GameState
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.last.commit.GameState
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItem
 
