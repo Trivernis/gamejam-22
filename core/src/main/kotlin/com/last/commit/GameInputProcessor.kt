@@ -1,10 +1,9 @@
 package com.last.commit
 
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.last.commit.screen.TimeTravelScreen
 
-class GameInputProcessor(val game: Game, ) : InputProcessor{
+class GameInputProcessor(val game: Game) : InputProcessor {
 
     lateinit var activeScreen: TimeTravelScreen
 
@@ -13,6 +12,7 @@ class GameInputProcessor(val game: Game, ) : InputProcessor{
     }
 
     override fun keyTyped(character: Char): Boolean {
+
         return false
     }
 

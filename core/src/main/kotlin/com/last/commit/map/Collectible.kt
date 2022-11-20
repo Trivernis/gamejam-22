@@ -1,11 +1,18 @@
 package com.last.commit.map
 
-import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.math.Vector2
-import com.last.commit.audio.GameSoundEffect
 import GameState
+import Position
+import com.badlogic.gdx.math.Rectangle
+import com.last.commit.audio.GameSoundEffect
+import com.last.commit.inventory.InventoryItem
 
-class Collectible(name: String, val pos: Position, private val size: Vector2) : Interactable {
+class Collectible(
+    name: String,
+    val pos: Position,
+    width: Float,
+    height: Float,
+    val requiredItem: String
+) : Interactable {
 
     val name: String
     private val collider: Rectangle
@@ -19,6 +26,20 @@ class Collectible(name: String, val pos: Position, private val size: Vector2) : 
         println("Interacting with item $name")
         state.soundEngine.play(GameSoundEffect.GRAB)
         state.inventory.add(this.name)
+    }
+
+    override fun canInteract(state: GameState): Boolean {
+        if (requiredItem == "") {
+            return true
+        }
+        val item: InventoryItem? = state.inventory.items.find { it.name == requiredItem }
+
+        if (item == null) {
+            return false
+        }
+
+        return true
+
     }
 
     override fun getCollider(): Rectangle {

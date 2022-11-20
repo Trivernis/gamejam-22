@@ -153,7 +153,7 @@
     <SubTexture name="genericItem_color_152.png" x="467" y="406" width="85" height="100"/>
     <SubTexture name="genericItem_color_153.png" x="553" y="1608" width="73" height="132"/>
     <SubTexture name="genericItem_color_154.png" x="367" y="964" width="94" height="73"/>
-    <SubTexture name="genericItem_color_155.png" x="625" y="293" width="63" height="65"/>
+    <SubTexture name="key" x="625" y="293" width="63" height="65"/>
     <SubTexture name="genericItem_color_156.png" x="550" y="1075" width="77" height="100"/>
     <SubTexture name="genericItem_color_157.png" x="363" y="1942" width="98" height="102"/>
     <SubTexture name="money" x="268" y="649" width="101" height="106"/>

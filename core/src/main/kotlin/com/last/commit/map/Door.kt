@@ -5,9 +5,24 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.math.Rectangle
 import com.last.commit.Wall
 import com.last.commit.audio.GameSoundEffect
+import com.last.commit.inventory.InventoryItem
 
 class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
-        Wall(gridX, gridY, wallCollider, cell), Interactable {
+    Wall(gridX, gridY, wallCollider, cell), Interactable {
+
+
+    override fun canInteract(state: GameState): Boolean {
+
+        val requiredItem: String = cell.getTile().getProperties().get("requiredItem", "", String::class.java)
+
+        val item: InventoryItem? = state.inventory.items.find { it.name == requiredItem }
+
+        if (item == null) {
+            return requiredItem == ""
+        } else {
+            return requiredItem == item.name
+        }
+    }
 
     override fun interact(otherCollider: Rectangle, state: GameState) {
         println("interacting with door $this")
@@ -46,12 +61,12 @@ class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
 
     override fun toString(): String {
         return String.format(
-                "Door: %f:%f - %f:%f (isOpen: %b)",
-                wallCollider.x,
-                wallCollider.y,
-                wallCollider.width,
-                wallCollider.height,
-                isOpen
+            "Door: %f:%f - %f:%f (isOpen: %b)",
+            wallCollider.x,
+            wallCollider.y,
+            wallCollider.width,
+            wallCollider.height,
+            isOpen
         )
     }
 }
