@@ -1,7 +1,7 @@
 package com.last.commit.config
 
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.Preferences
+import com.badlogic.gdx.math.MathUtils
 import java.util.*
 
 class GameSettings {
@@ -15,11 +15,11 @@ class GameSettings {
 
     var musicVolume: Float = 0.5F
         set(newValue: Float) {
-            field = valueRegulator(newValue, 1F, 0F) as Float
+            field = MathUtils.clamp(newValue, 1f, 0f)
         }
     var sfxVolume: Float = 0.5F
         set(newValue: Float) {
-            field = valueRegulator(newValue, 1F, 0F) as Float
+            field = MathUtils.clamp(newValue, 1f, 0f)
         }
 
 
@@ -31,6 +31,7 @@ class GameSettings {
         actionKeys[ActionCommand.OPEN_MENU] = listOf(Keys.ESCAPE)
         actionKeys[ActionCommand.TIME_TRAVEL] = listOf(Keys.T)
         actionKeys[ActionCommand.INTERACT] = listOf(Keys.E)
+        actionKeys[ActionCommand.JUMP] = listOf(Keys.SPACE)
 
         musicVolume = 0.5F
 
@@ -38,19 +39,8 @@ class GameSettings {
 
     }
 
-    private fun <T> valueRegulator(newValue: T, maxValue: T, minValue: T): T where T : Number, T : Comparable<T>{
-        return if (newValue.compareTo(maxValue) > 0) {
-            maxValue
-        } else if (newValue.compareTo(minValue) < 0) {
-            minValue
-        } else {
-            newValue
-        }
-
-    }
-
     private fun setReversed(actionKeys: EnumMap<ActionCommand, List<Int>>) {
-        for (actionCode in actionKeys.keys){
+        for (actionCode in actionKeys.keys) {
             for (key in actionKeys.getValue(actionCode)) {
                 actionKeysReversed[key] = actionCode
             }

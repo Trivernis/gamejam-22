@@ -1,17 +1,15 @@
 package com.last.commit.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.last.commit.ColorState
 import com.last.commit.Game
 import com.last.commit.config.ActionCommand
 
-class Settings (val parent: Game)  : TimeTravelScreen() {
+class Settings(val parent: Game) : TimeTravelScreen() {
 
 
     var stage: Stage
@@ -38,6 +36,9 @@ class Settings (val parent: Game)  : TimeTravelScreen() {
         stage.touchUp(screenX, screenY, pointer, button)
     }
 
+    override fun getInputProcessors(): Array<InputProcessor> {
+        return emptyArray()
+    }
 
 
     override fun show() {

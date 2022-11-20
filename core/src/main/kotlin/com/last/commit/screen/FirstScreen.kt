@@ -1,6 +1,7 @@
 package com.last.commit.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Json
 import com.last.commit.Game
 import com.last.commit.Player
@@ -19,6 +21,7 @@ import com.last.commit.config.ActionCommand
 import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
+import com.last.commit.stages.DialogStage
 import com.last.commit.stages.UIStage
 import kotlin.math.floor
 
@@ -45,6 +48,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     var pause = true
     var uiStage: UIStage
+    val dialogStage = DialogStage(Skin(Gdx.files.internal("ui/uiskin.json")))
 
 
     init {
@@ -65,6 +69,10 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     }
 
+    override fun getInputProcessors(): Array<InputProcessor> {
+        return arrayOf(dialogStage)
+    }
+
     override fun handleKeyInput(action: ActionCommand) {
         if (!pause) {
             when (action) {
@@ -74,6 +82,11 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
                 ActionCommand.TIME_TRAVEL -> {
                     map.teleport(player)
+                }
+
+                ActionCommand.JUMP -> {
+                    dialogStage.setTexts("Hello", "Please read the documentation")
+                    dialogStage.show()
                 }
 
                 else -> {}
@@ -111,6 +124,8 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     override fun render(delta: Float) {
         if (!pause) {
+            uiStage.act(delta)
+            dialogStage.act(delta)
             handleInput(delta)
             handleMapBorderCollision()
 
@@ -126,8 +141,8 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
             val interactables = map.getInteractablesAt(player.getAbsoluteDirection())
             renderInteractables(interactables)
 
-            uiStage.act(delta)
             uiStage.draw()
+            dialogStage.draw()
         }
     }
 
@@ -250,6 +265,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     override fun resize(width: Int, height: Int) {
         // Resize your screen here. The parameters represent the new window size.
         uiStage.resize(width, height)
+        dialogStage.resize(width, height)
         handleRatioChange()
     }
 
@@ -292,7 +308,6 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     }
 
     fun openDoor() {
-        println("Attempt to toggle door")
         val playerDirection: Vector2 = player.getAbsoluteDirection()
         map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
     }

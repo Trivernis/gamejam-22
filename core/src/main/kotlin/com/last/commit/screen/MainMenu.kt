@@ -1,6 +1,7 @@
 package com.last.commit.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -26,6 +27,7 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
         stage = Stage(ScreenViewport())
         uiSkin = parent.state.assetManager.getUiTexture()
     }
+
     override fun handleKeyInput(action: ActionCommand) {
         parent.changeScreen(Screens.GAME)
     }
@@ -33,6 +35,10 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
     override fun handleMouseInput(screenX: Int, screenY: Int, pointer: Int, button: Int) {
         stage.touchDown(screenX, screenY, pointer, button)
         stage.touchUp(screenX, screenY, pointer, button)
+    }
+
+    override fun getInputProcessors(): Array<InputProcessor> {
+        return emptyArray()
     }
 
     override fun show() {
@@ -83,7 +89,6 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
                 parent.changeScreen(Screens.SETTINGS)
             }
         })
-
 
 
     }

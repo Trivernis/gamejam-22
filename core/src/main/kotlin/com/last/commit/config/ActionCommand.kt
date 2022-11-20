@@ -11,4 +11,6 @@ enum class ActionCommand {
 
     //program interaction
     OPEN_MENU,
+
+    JUMP
 }

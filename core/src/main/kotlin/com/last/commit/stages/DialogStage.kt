@@ -1,0 +1,83 @@
+package com.last.commit.stages
+
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea
+
+
+/**
+ * Stage for dialog
+ */
+class DialogStage(skin: Skin?) : Stage() {
+    private var isVisible = false
+    private val texts = com.badlogic.gdx.utils.Array<String>()
+    private val area: TextArea
+
+    init {
+        area = TextArea("#", skin)
+        area.width = Gdx.graphics.width.toFloat()
+        area.height = 100f
+        addActor(area)
+    }
+
+    fun setTexts(vararg texts: String?) {
+        this.texts.clear()
+        this.texts.addAll(*texts)
+        next()
+    }
+
+    fun show() {
+        isVisible = true
+    }
+
+    fun hide() {
+        isVisible = false
+    }
+
+    fun resize(width: Int, height: Int) {
+        viewport.update(width, height, true)
+    }
+
+    override fun draw() {
+        if (isVisible) {
+            super.draw()
+        }
+    }
+
+    override fun act() {
+        if (isVisible) {
+            super.act()
+        }
+    }
+
+    override fun act(delta: Float) {
+        if (isVisible) {
+            super.act(delta)
+        }
+    }
+
+    override fun keyDown(keyCode: Int): Boolean {
+        if (!isVisible) {
+            return false
+        }
+        if (keyCode == Input.Keys.SPACE) {
+            if (texts.size > 0) {
+                //set next dialog text
+                next()
+            } else {
+                // hide dialog area cause there is no more text to show
+                hide()
+            }
+        }
+        return true
+    }
+
+    private operator fun next() {
+        area.clear()
+        area.text = texts.first()
+        texts.removeIndex(0)
+    }
+
+}
