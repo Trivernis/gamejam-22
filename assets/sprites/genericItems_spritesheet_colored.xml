@@ -74,7 +74,7 @@
     <SubTexture name="genericItem_color_073.png" x="688" y="1178" width="58" height="79"/>
     <SubTexture name="genericItem_color_074.png" x="261" y="1095" width="105" height="91"/>
     <SubTexture name="files" x="0" y="1360" width="134" height="122"/>
-    <SubTexture name="genericItem_color_076.png" x="155" y="456" width="112" height="76"/>
+    <SubTexture name="ram" x="155" y="456" width="112" height="76"/>
     <SubTexture name="genericItem_color_077.png" x="132" y="1600" width="124" height="86"/>
     <SubTexture name="graphics_card" x="0" y="99" width="163" height="92"/>
     <SubTexture name="genericItem_color_079.png" x="626" y="1409" width="64" height="92"/>
@@ -132,7 +132,7 @@
     <SubTexture name="genericItem_color_131.png" x="736" y="571" width="20" height="106"/>
     <SubTexture name="genericItem_color_132.png" x="254" y="1686" width="113" height="118"/>
     <SubTexture name="file" x="0" y="880" width="145" height="147"/>
-    <SubTexture name="genericItem_color_134.png" x="461" y="1855" width="92" height="132"/>
+    <SubTexture name="knife" x="461" y="1855" width="92" height="132"/>
     <SubTexture name="genericItem_color_135.png" x="462" y="1132" width="88" height="140"/>
     <SubTexture name="genericItem_color_136.png" x="626" y="1589" width="62" height="146"/>
     <SubTexture name="genericItem_color_137.png" x="461" y="921" width="89" height="136"/>
