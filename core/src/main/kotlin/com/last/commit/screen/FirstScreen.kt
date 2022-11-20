@@ -63,7 +63,6 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         uiStage = UIStage("sprites/genericItems_spritesheet_colored", gameState)
         shapeRenderer.setAutoShapeType(true)
 
-        player.addItemToInventory("drill")
         gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
 
         viewport.camera = camera
