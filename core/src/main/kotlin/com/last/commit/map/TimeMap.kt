@@ -51,6 +51,7 @@ class TimeMap(fileName: String, val state: GameState) {
     init {
         map = mapLoader.load(fileName)
         mapState = MapState(map)
+        state.map = mapState
         mapStates[fileName] = mapState
         mapRenderer = OrthogonalTiledMapRenderer(map)
         this.textureLoader.parse()
@@ -80,6 +81,7 @@ class TimeMap(fileName: String, val state: GameState) {
             mapState = MapState(map)
             mapStates[name] = mapState
         }
+        state.map = mapState
     }
 
     fun getPlayerSpawn(): Vector2 {

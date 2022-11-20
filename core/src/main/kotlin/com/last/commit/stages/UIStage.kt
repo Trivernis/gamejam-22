@@ -11,7 +11,7 @@ import com.last.commit.inventory.InventoryItemTextureLoader
 class UIStage(path: String, val state: GameState) : Stage() {
     val textureLoader = InventoryItemTextureLoader(path)
     private val labelStyle = Label.LabelStyle(BitmapFont(), Color.BLACK)
-    var mapLabel = Label(state.mapDescription, labelStyle)
+    var mapLabel = Label("unknown time", labelStyle)
     var fpsLabel = Label("0", labelStyle)
     private var lastFpsUpdate = 0L
 
@@ -60,10 +60,12 @@ class UIStage(path: String, val state: GameState) : Stage() {
     }
 
     private fun addMapDescriptionLabel() {
-        this.actors.removeValue(this.mapLabel, true)
-        this.mapLabel = Label(state.mapDescription, labelStyle)
-        mapLabel.x = 0f
-        mapLabel.y = this.viewport.worldHeight - mapLabel.height
-        addActor(mapLabel)
+        if (state.map != null) {
+            this.actors.removeValue(this.mapLabel, true)
+            this.mapLabel = Label(state.map!!.description, labelStyle)
+            mapLabel.x = 0f
+            mapLabel.y = this.viewport.worldHeight - mapLabel.height
+            addActor(mapLabel)
+        }
     }
 }

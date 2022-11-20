@@ -9,6 +9,7 @@ import com.last.commit.config.GameSettings
 import com.last.commit.config.TimeTravelAssetManager
 import com.last.commit.inventory.Inventory
 import com.last.commit.screen.*
+import com.last.commit.map.MapState
 import java.awt.AWTEventMulticaster
 import java.sql.Time
 

@@ -25,6 +25,7 @@ class Collectible(
         println("Interacting with item $name")
         state.soundEngine.play(GameSoundEffect.GRAB)
         state.inventory.add(this.name)
+        state.map?.collectibles?.remove(this)
     }
 
     override fun canInteract(state: GameState): Boolean {
