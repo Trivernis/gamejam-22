@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="64" tileheight="64" infinite="0" nextlayerid="12" nextobjectid="39">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="64" tileheight="64" infinite="0" nextlayerid="12" nextobjectid="42">
  <properties>
   <property name="description" value="10.12.2001"/>
   <property name="id" type="int" value="1"/>
@@ -577,7 +577,7 @@
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
-  <object id="28" x="672.727" y="212.121" width="851.515" height="536.364">
+  <object id="28" x="814.727" y="272.121" width="597.515" height="400.364">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
@@ -587,27 +587,27 @@
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="30" x="1548.48" y="2036.36" width="415.152" height="142.424">
+  <object id="30" x="1634.48" y="2060.36" width="255.152" height="80.424">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="31" x="1978.79" y="1993.94" width="300" height="242.424">
+  <object id="31" x="2034.79" y="2055.94" width="150" height="110.424">
    <properties>
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="32" x="1848.48" y="2239.39" width="430.303" height="409.091">
+  <object id="32" x="1880.48" y="2281.39" width="342.303" height="313.091">
    <properties>
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
-  <object id="33" x="1598.67" y="2233.33" width="240" height="216">
+  <object id="33" x="1678.67" y="2301.33" width="98" height="60">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
   </object>
-  <object id="34" x="1545.33" y="2457.33" width="298.667" height="197.333">
+  <object id="34" x="1597.33" y="2499.33" width="194.667" height="87.333">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
