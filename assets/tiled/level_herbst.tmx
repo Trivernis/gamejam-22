@@ -499,7 +499,7 @@
   </object>
   <object id="8" x="704" y="252" width="772" height="444">
    <properties>
-    <property name="target" value="level_.tmx"/>
+    <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
   <object id="9" x="4" y="0" width="640" height="1084">
@@ -527,27 +527,27 @@
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
-  <object id="15" x="1857.33" y="2244" width="444" height="438.667">
+  <object id="15" x="1905.81" y="2274.3" width="295.515" height="329.576">
    <properties>
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="16" x="1560" y="2046.67" width="412" height="130.667">
+  <object id="16" x="1617.58" y="2070.91" width="278.667" height="76.1215">
    <properties>
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="17" x="1985.33" y="1990.67" width="257.333" height="248">
+  <object id="17" x="2018.66" y="2042.19" width="172.485" height="144.97">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
   </object>
-  <object id="18" x="1582.67" y="2234.67" width="261.333" height="209.333">
+  <object id="18" x="1582.67" y="2234.67" width="88.6057" height="60.8482">
    <properties>
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="19" x="1546.67" y="2448" width="301.333" height="212">
+  <object id="19" x="1595.15" y="2502.55" width="183.151" height="75.6364">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
@@ -629,7 +629,7 @@
     <property name="item" value="key"/>
    </properties>
   </object>
-  <object id="7" x="1600" y="2242" width="58" height="56">
+  <object id="7" x="1684.85" y="2305.64" width="58" height="56">
    <properties>
     <property name="item" value="screwdriver"/>
    </properties>
