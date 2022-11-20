@@ -532,7 +532,11 @@
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="19" x="2303.03" y="-6.06061" width="1215.15" height="200"/>
+  <object id="19" x="2303.03" y="-6.06061" width="1215.15" height="200">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
   <object id="20" x="3796.97" y="1457.58" width="39.3939" height="2624.24">
    <properties>
     <property name="target" value="level_winter.tmx"/>
