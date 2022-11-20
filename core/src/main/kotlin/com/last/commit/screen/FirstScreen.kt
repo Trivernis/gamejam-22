@@ -50,7 +50,6 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     val highlightColor = Color(0f, 0f, 1f, 0.5f)
 
-    var pause = true
     var uiStage: UIStage
     val promptStage: PromptStage
 
@@ -66,7 +65,6 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         uiStage = UIStage("sprites/genericItems_spritesheet_colored", gameState)
         shapeRenderer.setAutoShapeType(true)
 
-        gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
         promptStage = PromptStage(Skin(Gdx.files.internal("ui/uiskin.json")))
         promptStage.addText("""  
         You are stranded in time.
@@ -102,7 +100,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     }
 
     override fun handleKeyInput(action: ActionCommand) {
-        if (!pause) {
+
             when (action) {
                 ActionCommand.INTERACT -> {
                     openDoor()
@@ -123,20 +121,21 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
                 //Gdx.app.exit()
                 parent.changeScreen(Screens.MAIN_MENU)
             }
-        }
+
 
     }
 
     override fun handleMouseInput(screenX: Int, screenY: Int, pointer: Int, button: Int) {
-        if (!pause) {
+
+            val mouseCoordinates: Vector2 = toWorldCoordinates(screenX.toFloat(), screenY.toFloat())
             val playerDirection: Vector2 = player.getAbsoluteDirection()
 
             map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
-        }
     }
 
     override fun show() {
-        // Prepare your screen here.
+
+
         resume()
     }
 
@@ -154,7 +153,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
             promptStage.addText("You won!")
             promptStage.act(delta)
             promptStage.draw()
-        } else if (!pause) {
+        } else {
             uiStage.act(delta)
             gameState.dialogStage.act(delta)
             promptStage.act(delta)
@@ -299,21 +298,18 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
 
     override fun pause() {
-        pause = true
-        gameState.soundEngine.stop()
 
     }
 
     override fun resume() {
-        pause = false
-        gameState.soundEngine.resume();
         this.viewport.apply()
         this.updateCamera()
         // Invoked when your application is resumed after pause.
     }
 
     override fun hide() {
-        pause()
+
+        //gameState.soundEngine.stop()
     }
 
     override fun dispose() {
