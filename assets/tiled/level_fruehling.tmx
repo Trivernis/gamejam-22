@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="64" tileheight="64" infinite="0" nextlayerid="13" nextobjectid="46">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="64" tileheight="64" infinite="0" nextlayerid="13" nextobjectid="98">
  <properties>
   <property name="description" value="15.04.2005"/>
   <property name="id" type="int" value="1"/>
@@ -358,7 +358,7 @@
 0,0,0,0,0,0,0,0,208,209,338,0,0,0,0,0,0,0,0,0,0,0,0,339,0,0,181,182,0,0,0,0,0,0,0,181,182,0,0,0,0,0,0,0,0,176,129,129,0,0,0,0,129,129,177,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,338,0,0,0,0,0,0,0,0,0,0,0,0,339,0,0,208,209,0,0,0,0,0,0,0,208,209,0,0,0,0,0,0,0,0,152,204,204,204,471,204,204,204,204,153,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,338,0,0,0,0,0,0,0,0,0,0,0,0,339,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,314,366,366,366,366,366,471,471,366,366,366,366,366,315,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,314,366,366,366,366,366,366,303,366,366,366,366,366,315,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,181,182,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,88,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,88,0,0,0,0,0,0,0,208,209,0,0,0,0,0,0,0,181,182,0,0,0,0,0,0,0,0,0,0,0,88,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,208,209,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,88,0,0,88,0,0,0,0,0,0,0,0,0,
@@ -392,12 +392,12 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,208,209,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,208,209,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,181,182,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,208,209,0,470,470,470,470,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,443,0,0,0,0,444,0,0,0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,443,0,181,182,0,0,0,0,0,0,0,0,81,0,0,0,0,0,0,280,282,282,470,282,281,0,280,470,282,282,281,0,0,0,0,0,0,0,181,182,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,443,0,208,209,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,309,0,0,0,0,309,0,309,0,0,0,309,0,0,0,0,0,0,0,208,209,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,181,182,0,0,0,444,0,0,0,0,0,0,0,0,0,0,0,0,0,309,0,0,0,0,309,0,309,0,0,0,309,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,208,209,471,471,471,0,0,0,181,182,0,0,0,0,0,0,0,0,0,309,0,0,0,0,309,0,309,156,0,0,309,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,208,209,129,129,129,129,129,129,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,129,0,0,0,0,129,0,0,0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,129,0,181,182,0,276,0,0,0,0,0,0,81,0,0,0,0,0,0,280,282,282,470,282,281,0,280,470,282,282,281,0,0,0,0,0,0,0,181,182,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,129,0,208,209,0,129,0,0,0,0,0,0,0,0,0,0,0,0,0,309,0,0,0,0,309,0,309,0,0,0,309,0,0,0,0,0,0,0,208,209,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,181,182,0,0,0,129,0,0,0,0,0,0,0,0,0,0,0,0,0,309,0,0,0,0,309,0,309,0,0,0,309,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,81,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,208,209,129,129,129,129,0,0,181,182,0,0,0,0,0,0,0,0,0,309,0,0,0,0,309,0,309,156,0,0,309,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,208,209,0,0,0,181,182,0,0,0,0,309,0,0,0,0,309,0,309,129,0,0,309,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,208,209,0,0,0,0,309,2684354881,0,0,1610613057,309,0,309,157,0,0,309,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,235,235,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,309,2684354854,0,0,1610613030,309,0,309,2684354825,0,0,309,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,181,182,0,0,0,0,0,0,0,0,0,
@@ -419,7 +419,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,317,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,81,0,0,88,0,0,210,0,0,88,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -507,7 +507,7 @@
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="16" x="1856" y="2236" width="382" height="378.667">
+  <object id="16" x="1856" y="2236" width="382" height="170.667">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
@@ -522,37 +522,122 @@
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="21" x="707.152" y="248" width="768.848" height="453.939">
-   <properties>
-    <property name="target" value="level_winter.tmx"/>
-   </properties>
-  </object>
-  <object id="23" x="4" y="0" width="636" height="1052">
+  <object id="23" x="4" y="0" width="244" height="1038">
    <properties>
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="24" x="644" y="2" width="1604" height="194">
+  <object id="56" x="318" y="24" width="292" height="344">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="57" x="296" y="582" width="292" height="230">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="58" x="348" y="910" width="204" height="210">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="59" x="380" y="1288" width="204" height="210">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="60" x="444" y="1638" width="182" height="164">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="24" x="644" y="2" width="688" height="194">
    <properties>
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
-  <object id="25" x="640" y="764" width="888" height="1280">
+  <object id="65" x="1694" y="26" width="424" height="482">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="25" x="678.441" y="904.941" width="321.021" height="273.901" rotation="0.39667">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="26" x="-4" y="1054" width="654" height="1510">
+  <object id="61" x="1005.84" y="1038.85" width="321.021" height="475.993" rotation="0.39667">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="62" x="666.705" y="1466.87" width="321.021" height="311.969" rotation="0.39667">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="63" x="1030.93" y="1670.96" width="321.021" height="343.886" rotation="0.39667">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="26" x="66" y="2498" width="536" height="64">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
   </object>
-  <object id="27" x="-4" y="2572" width="1548" height="660">
+  <object id="97" x="58" y="2306" width="536" height="122">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="54" x="42" y="1826" width="536" height="250">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="55" x="30" y="1046" width="278" height="766">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="49" x="728" y="3094" width="678" height="112">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="28" x="644" y="2036" width="896" height="536">
+  <object id="93" x="564" y="2736" width="820" height="112">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="94" x="726" y="2872" width="656" height="112">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="52" x="58" y="2592" width="460" height="176">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="53" x="46" y="2986" width="254" height="228">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="50" x="28" y="3670" width="342" height="268">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="28" x="644" y="2252" width="426" height="314">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="96" x="650" y="1924" width="352" height="208">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
@@ -562,7 +647,12 @@
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
-  <object id="30" x="-1.33333" y="3230.67" width="1538.67" height="866.667">
+  <object id="30" x="-1.33333" y="3972.67" width="1538.67" height="124.667">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="46" x="830.667" y="3840.67" width="706.67" height="124.667">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
@@ -572,27 +662,137 @@
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="33" x="1540" y="3708" width="2560" height="396">
+  <object id="33" x="1904" y="3708" width="2196" height="396">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
   </object>
-  <object id="34" x="2308" y="2688" width="1788" height="1020">
+  <object id="92" x="1546" y="3718" width="226" height="364">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="47" x="16" y="3266" width="762" height="312">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="48" x="842" y="3408" width="614" height="220">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="34" x="3216" y="2772" width="866" height="306">
    <properties>
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
-  <object id="35" x="2304" y="2236" width="884" height="436">
+  <object id="91" x="3432" y="3106" width="638" height="164">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="71" x="2330" y="2698" width="866" height="264">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="72" x="2380" y="2998" width="296" height="264">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="73" x="2888" y="3004" width="296" height="264">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="74" x="2366" y="3296" width="842" height="264">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="75" x="3222" y="3530" width="812" height="172">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="76" x="3592" y="3386" width="468" height="128">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="77" x="2760" y="3574" width="448" height="128">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="78" x="2374" y="3572" width="246" height="128">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="35" x="2304" y="2144" width="884" height="528">
    <properties>
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="36" x="3212" y="636" width="876" height="2048">
+  <object id="70" x="2338" y="1984" width="506" height="154">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="36" x="3212" y="1098" width="876" height="150">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="37" x="2300" y="1352" width="912" height="880">
+  <object id="95" x="3104" y="1298" width="516" height="150">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="87" x="3290" y="960" width="790" height="124">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="88" x="3208" y="670" width="870" height="208">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="79" x="3224" y="1470" width="876" height="536">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="80" x="3242" y="2318" width="830" height="274">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="89" x="3220" y="2130" width="472" height="154">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="90" x="3728" y="2024" width="330" height="196">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="37" x="2300" y="1734" width="912" height="256">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="86" x="2438" y="1544" width="750" height="104">
+   <properties>
+    <property name="target" value="level_winter.tmx"/>
+   </properties>
+  </object>
+  <object id="69" x="2562" y="1370" width="302" height="78">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
@@ -602,17 +802,62 @@
     <property name="target" value="level_winter.tmx"/>
    </properties>
   </object>
-  <object id="39" x="1532" y="200" width="708" height="1592">
+  <object id="39" x="1532" y="664" width="708" height="426">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="40" x="2240" y="8" width="60" height="1788">
+  <object id="84" x="1796" y="520" width="432" height="128">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="64" x="1470" y="1672" width="752" height="88">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="81" x="1894" y="1150" width="320" height="278">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="82" x="1602" y="1518" width="320" height="140">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="83" x="1350" y="1340" width="320" height="140">
+   <properties>
+    <property name="target" value="level_herbst.tmx"/>
+   </properties>
+  </object>
+  <object id="40" x="2240" y="900" width="60" height="572">
    <properties>
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
   </object>
-  <object id="41" x="2300" y="636" width="900" height="712">
+  <object id="66" x="2238" y="10" width="60" height="472">
+   <properties>
+    <property name="target" value="level_fruehling.tmx"/>
+   </properties>
+  </object>
+  <object id="41" x="2300" y="636" width="748" height="356">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="67" x="2370" y="1154" width="712" height="120">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="68" x="2328" y="1022" width="396" height="120">
+   <properties>
+    <property name="target" value="level_sommer.tmx"/>
+   </properties>
+  </object>
+  <object id="85" x="2408" y="502" width="396" height="120">
    <properties>
     <property name="target" value="level_sommer.tmx"/>
    </properties>
@@ -622,17 +867,17 @@
     <property name="target" value="level_sommer.tmx"/>
    </properties>
   </object>
-  <object id="43" x="2308" y="0" width="582" height="636">
+  <object id="43" x="2340" y="0" width="550" height="480">
    <properties>
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="44" x="2894" y="-10" width="1200" height="212">
+  <object id="44" x="2898" y="10" width="1180" height="176">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
   </object>
-  <object id="45" x="3514" y="198" width="576" height="444">
+  <object id="45" x="3536" y="212" width="546" height="446">
    <properties>
     <property name="target" value="level_winter.tmx"/>
    </properties>
@@ -654,7 +899,7 @@
   </object>
  </objectgroup>
  <objectgroup id="12" name="SFX">
-  <object id="6" x="1536" y="3008" width="384" height="704">
+  <object id="6" x="1528" y="3004" width="384" height="704">
    <properties>
     <property name="ground" value="indoor"/>
    </properties>
@@ -664,7 +909,7 @@
     <property name="ground" value="indoor"/>
    </properties>
   </object>
-  <object id="8" x="1538.67" y="1790.67">
+  <object id="8" x="1546.67" y="1816.67">
    <properties>
     <property name="ground" value="indoor"/>
    </properties>
