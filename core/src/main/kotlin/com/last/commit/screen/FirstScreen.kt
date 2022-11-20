@@ -170,7 +170,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
     private fun getMousePosition(): Vector2 {
         val unprojectedMousePosition =
-            camera.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
+            viewport.unproject(Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
         return Vector2(unprojectedMousePosition.x, unprojectedMousePosition.y)
     }
 
@@ -290,7 +290,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     }
 
     fun toWorldCoordinates(x: Float, y: Float): Vector2 {
-        val mouseInWorldPosition = camera.unproject(Vector3(x, y, 0f))
+        val mouseInWorldPosition = viewport.unproject(Vector3(x, y, 0f))
         return Vector2(
             floor(mouseInWorldPosition.x.toDouble() / this.map.getTileWidth()).toFloat(),
             floor(mouseInWorldPosition.y.toDouble() / this.map.getTileHeight()).toFloat()
