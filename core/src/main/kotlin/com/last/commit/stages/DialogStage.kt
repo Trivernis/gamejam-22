@@ -5,12 +5,13 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea
+import com.badlogic.gdx.utils.viewport.ExtendViewport
 
 
 /**
  * Stage for dialog
  */
-class DialogStage(skin: Skin?) : Stage() {
+class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
     private var isVisible = false
     private val texts = com.badlogic.gdx.utils.Array<String>()
     private val area: TextArea
