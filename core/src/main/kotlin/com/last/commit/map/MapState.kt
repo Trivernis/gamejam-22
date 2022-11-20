@@ -75,8 +75,10 @@ class MapState(val map: TiledMap) {
         
         return if (obj is RectangleMapObject) {
             val itemName: String? = obj.properties.get("item", String::class.java)
+            val requiredItem = obj.properties.get("requiredItem", String::class.java) ?: ""
+
             if (itemName != null) {
-                 Collectible(itemName, Position(coords, gridCoords), size)
+                 Collectible(itemName, Position(coords, gridCoords), size, requiredItem)
             } else {
                 null
             }

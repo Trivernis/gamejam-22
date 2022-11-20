@@ -1,16 +1,15 @@
 package com.last.commit.map
 
 import GameState
-import Position
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector2
 import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItem
 
 class Collectible(
     name: String,
     val pos: Position,
-    width: Float,
-    height: Float,
+    val size: Vector2,
     val requiredItem: String
 ) : Interactable {
 
