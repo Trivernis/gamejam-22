@@ -22,6 +22,8 @@ class Settings(val parent: Game) : TimeTravelScreen() {
     lateinit var musicOnOffLabel: Label
     lateinit var soundOnOffLabel: Label
 
+    val table = Table()
+
     init {
         parent.state.assetManager.finishLoading()
         stage = Stage(ScreenViewport())
@@ -46,7 +48,11 @@ class Settings(val parent: Game) : TimeTravelScreen() {
 
         // Create a table that fills the screen. Everything else will go inside
         // this table.
-        val table = Table()
+
+    }
+
+    fun renderTable(x: Float, y: Float) {
+        table.reset()
         table.setFillParent(true)
         //table.setDebug(true);
         stage.addActor(table)
@@ -101,17 +107,22 @@ class Settings(val parent: Game) : TimeTravelScreen() {
         soundOnOffLabel = Label("Sound Effect", skin)
         table.add(titleLabel).colspan(2)
         table.row().pad(10F, 0F, 0F, 10F)
+        table.row().size(x, y);
         table.add(volumeMusicLabel).left()
         table.add(volumeMusicSlider)
+        table.row().size(x, y);
         table.row().pad(10F, 0F, 0F, 10F)
         table.add(musicOnOffLabel).left()
         table.add(musicCheckbox)
+        table.row().size(x, y);
         table.row().pad(10F, 0F, 0F, 10F)
         table.add(volumeSoundLabel).left()
         table.add(soundMusicSlider)
+        table.row().size(x, y);
         table.row().pad(10F, 0F, 0F, 10F)
         table.add(soundOnOffLabel).left()
         table.add(soundEffectsCheckbox)
+        table.row().size(x, y);
         table.row().pad(10F, 0F, 0F, 10F)
         table.add(backButton).colspan(2)
     }
@@ -127,7 +138,14 @@ class Settings(val parent: Game) : TimeTravelScreen() {
     }
 
     override fun resize(width: Int, height: Int) {
-        stage.viewport.update(width, height)
+        println("width $width, height $height")
+        stage.viewport.update(width, height, true);
+
+
+        val y = stage.viewport.screenHeight.toFloat() / 6
+        val x = stage.viewport.screenWidth.toFloat() / 4
+
+        renderTable(x, y)
     }
 
     override fun pause() {

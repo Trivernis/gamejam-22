@@ -60,7 +60,7 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
         table.setFillParent(true);
 
         val newGame = TextButton("Play Game", uiSkin)
-        val preferences = TextButton("Preferences", uiSkin)
+        val preferences = TextButton("Settings", uiSkin)
         preferences.setSize(stage.viewport.screenWidth.toFloat(), stage.viewport.screenHeight.toFloat())
         val exit = TextButton("Exit", uiSkin)
 
