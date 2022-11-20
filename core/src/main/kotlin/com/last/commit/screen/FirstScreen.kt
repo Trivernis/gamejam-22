@@ -13,6 +13,9 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Json
+import com.badlogic.gdx.utils.viewport.Viewport
+import com.badlogic.gdx.utils.viewport.StretchViewport
+import com.badlogic.gdx.utils.viewport.FillViewport
 import com.last.commit.Game
 import com.last.commit.Player
 import com.last.commit.audio.GameMusic
@@ -34,6 +37,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     private var isColliding = false
 
     val batch = SpriteBatch()
+    val viewport = FillViewport(viewportSize, viewportSize)
     val camera = OrthographicCamera(viewportSize, viewportSize)
 
     var map: TimeMap
@@ -56,14 +60,14 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
         this.spawnPlayer()
         this.updateCamera()
 
-        handleRatioChange()
-
         uiStage = UIStage("sprites/genericItems_spritesheet_colored", gameState)
         shapeRenderer.setAutoShapeType(true)
 
         player.addItemToInventory("drill")
         gameState.soundEngine.play(GameMusic.WORLD_MUSIC, 0.25f)
 
+        viewport.camera = camera
+        viewport.apply()
     }
 
     override fun getInputProcessors(): Array<InputProcessor> {
@@ -129,6 +133,7 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
             val mousePosition: Vector2 = getMousePosition()
             player.lookAt(mousePosition)
 
+            
             batch.projectionMatrix = camera.combined
             batch.begin()
             this.map.render(batch, camera, delta)
@@ -140,6 +145,8 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
 
             uiStage.draw()
             gameState.dialogStage.draw()
+            viewport.apply()
+            updateCamera()
         }
     }
 
@@ -227,60 +234,33 @@ class FirstScreen(private val parent: Game) : TimeTravelScreen() {
     private fun checkCollision() {
         this.isColliding = map.isCollidingWith(player)
     }
+    
+    
+    private fun updateCamera() {
+        val mapSize = Vector2(map.width.toFloat(), map.height.toFloat())
 
-    fun updateCamera() {
-        val cX: Float
-        val cY: Float
-
-        val halfScreenWidth = camera.viewportWidth / 2
-        val halfScreenHeight = camera.viewportHeight / 2
-        val playerXPosition: Float = this.player.getX()
-        val playerYPosition: Float = this.player.getY()
-        val mapWidth: Int = map.width
-        val mapHeight: Int = map.height
-
-        cX = if (playerXPosition < halfScreenWidth) {
-            halfScreenWidth
-        } else if (playerXPosition > mapWidth - halfScreenWidth) {
-            mapWidth - halfScreenWidth
-        } else {
-            playerXPosition
-        }
-
-        cY = if (playerYPosition < halfScreenHeight) {
-            halfScreenHeight
-        } else if (playerYPosition > mapHeight - halfScreenHeight) {
-            mapHeight - halfScreenHeight
-        } else {
-            playerYPosition
-        }
-
-        camera.position[cX, cY] = 0f
+        val scale = viewport.worldHeight / viewport.screenHeight
+        camera.position.x = MathUtils.clamp(
+            player.position.x,
+            (viewport.worldWidth / 2f) + (viewport.leftGutterWidth * scale),
+            mapSize.x - (viewport.worldWidth / 2f) - (viewport.rightGutterWidth * scale)
+        )
+        camera.position.y = MathUtils.clamp(
+            player.position.y,
+            (viewport.worldHeight / 2f) + (viewport.topGutterHeight * scale),
+            mapSize.y - (viewport.worldHeight / 2f) - (viewport.bottomGutterHeight * scale)
+        )
         camera.update()
     }
-
     override fun resize(width: Int, height: Int) {
         // Resize your screen here. The parameters represent the new window size.
         uiStage.resize(width, height)
         gameState.dialogStage.resize(width, height)
-        handleRatioChange()
+        viewport.update(width, height)
+        viewport.apply()
+        camera.update()
     }
 
-    fun handleRatioChange() {
-        val height = Gdx.graphics.height
-        val width = Gdx.graphics.width
-
-        val wRatio = width.toFloat() / height.toFloat()
-        val hRatio = height.toFloat() / width.toFloat()
-        if (wRatio < 1) {
-            camera.viewportWidth = viewportSize * wRatio
-            camera.viewportHeight = viewportSize
-        } else {
-            camera.viewportHeight = viewportSize * hRatio
-            camera.viewportWidth = viewportSize
-        }
-        updateCamera()
-    }
 
     override fun pause() {
         pause = true

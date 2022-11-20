@@ -5,10 +5,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.last.commit.GameState
 import com.last.commit.inventory.InventoryItemTextureLoader
 
-class UIStage(path: String, val state: GameState) : Stage() {
+class UIStage(path: String, val state: GameState) : Stage(ExtendViewport(512f, 512f)) {
     val textureLoader = InventoryItemTextureLoader(path)
     private val labelStyle = Label.LabelStyle(BitmapFont(), Color.BLACK)
     var mapLabel = Label("unknown time", labelStyle)
@@ -45,6 +48,7 @@ class UIStage(path: String, val state: GameState) : Stage() {
     }
 
     override fun draw() {
+        this.viewport.apply()
         super.draw()
     }
 

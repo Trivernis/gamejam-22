@@ -38,10 +38,12 @@ class DialogStage(skin: Skin?) : Stage() {
 
     fun resize(width: Int, height: Int) {
         viewport.update(width, height, true)
+        this.camera.update()
     }
 
     override fun draw() {
         if (isVisible) {
+            this.viewport.apply()
             super.draw()
         }
     }
