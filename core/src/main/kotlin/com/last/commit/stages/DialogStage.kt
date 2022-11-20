@@ -15,6 +15,7 @@ class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
     private var isVisible = false
     private val texts = com.badlogic.gdx.utils.Array<String>()
     private val area: TextArea
+    var closeIn: Long? = null
 
     init {
         area = TextArea("#", skin)
@@ -26,6 +27,13 @@ class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
     fun setTexts(vararg texts: String?) {
         this.texts.clear()
         this.texts.addAll(*texts)
+        next()
+    }
+
+    fun setTexts(duration: Long, vararg texts: String?) {
+        this.texts.clear()
+        this.texts.addAll(*texts)
+        this.closeIn = System.currentTimeMillis() + duration
         next()
     }
 
@@ -45,14 +53,24 @@ class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
 
     override fun draw() {
         if (isVisible) {
-            this.viewport.apply()
-            super.draw()
+            if (closeIn != null && closeIn!! < System.currentTimeMillis()) {
+                closeIn = null
+                this.hide()
+            } else {
+                this.viewport.apply()
+                super.draw()
+            }
         }
     }
 
     override fun act() {
         if (isVisible) {
-            super.act()
+            if (closeIn != null && closeIn!! < System.currentTimeMillis()) {
+                closeIn = null
+                this.hide()
+            } else {
+                super.act()
+            }
         }
     }
 
@@ -75,7 +93,7 @@ class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
                 hide()
             }
         }
-        return true
+        return false
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
