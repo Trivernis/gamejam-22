@@ -36,7 +36,7 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
             updateCollider()
 
             if (System.currentTimeMillis() - lastStep > 500) {
-                gameState.soundEngine.play(GameSoundEffect.STEPS_INDOOR, 0.5f)
+                gameState.soundEngine.play(GameSoundEffect.STEPS_INDOOR) //0.5F
                 lastStep = System.currentTimeMillis()
             }
         }

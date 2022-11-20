@@ -3,6 +3,7 @@ package com.last.commit.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -21,6 +22,7 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
     var table = Table()
     val uiSkin: Skin
 
+    val state = ColorState()
     init {
 
         parent.state.assetManager.finishLoading()
@@ -93,13 +95,17 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
 
     }
 
-    val state = ColorState()
     override fun render(delta: Float) {
 
         state.step((delta * 1000).toLong())
         // Draw your screen here. "delta" is the time since last render in seconds.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        Gdx.gl.glClearColor(state.red, state.green, state.blue, 1f)
+
+        var red = MathUtils.clamp(state.red,0.1F, 0.5F)
+        var blue = MathUtils.clamp(state.green,0.1F, 0.5F)
+        var green = MathUtils.clamp(state.blue,0.1F, 0.5F)
+
+        Gdx.gl.glClearColor(red, green, blue, 1f)
 
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

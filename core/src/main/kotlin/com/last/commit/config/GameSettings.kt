@@ -2,24 +2,56 @@ package com.last.commit.config
 
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.MathUtils
+import com.last.commit.GameState
+import com.last.commit.audio.SoundEngine
 import java.util.*
 
-class GameSettings {
+class GameSettings() {
+    lateinit var soundEngin : SoundEngine
 
     private val actionKeys: EnumMap<ActionCommand, List<Int>> = EnumMap(ActionCommand::class.java)
     private val actionKeysReversed: HashMap<Int, ActionCommand> = hashMapOf()
 
 
     var musicEnabled: Boolean = true
+        set(newValue: Boolean) {
+        field = newValue
+        soundEngin?.volumeMusic =  musicVolume
+    }
     var sfxEnabled: Boolean = true
+        set(newValue: Boolean) {
+        field = newValue
+        soundEngin?.volumeSfx =  sfxVolume
+    }
 
     var musicVolume: Float = 0.5F
+        get() {
+            return if (musicEnabled) {
+                field
+            } else {
+                0F
+            }
+        }
         set(newValue: Float) {
-            field = MathUtils.clamp(newValue, 1f, 0f)
+            field = newValue
+            soundEngin?.volumeMusic =  musicVolume
         }
     var sfxVolume: Float = 0.5F
+        get() {
+            return if (sfxEnabled) {
+                field
+            } else {
+                0F
+            }
+        }
         set(newValue: Float) {
-            field = MathUtils.clamp(newValue, 1f, 0f)
+            field = newValue
+
+            println("settings volume sfx :$sfxVolume")
+            soundEngin?.volumeSfx = sfxVolume
+            soundEngin?. let {
+                println("soundengine volume sfx :$sfxVolume")
+            }
         }
 
 
@@ -32,8 +64,6 @@ class GameSettings {
         actionKeys[ActionCommand.TIME_TRAVEL] = listOf(Keys.T)
         actionKeys[ActionCommand.INTERACT] = listOf(Keys.E)
         actionKeys[ActionCommand.JUMP] = listOf(Keys.SPACE)
-
-        musicVolume = 0.5F
 
         setReversed(actionKeys)
 

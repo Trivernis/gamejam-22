@@ -1,5 +1,7 @@
 package com.last.commit;
 
+import com.badlogic.gdx.math.MathUtils
+
 class ColorState {
     public var red = 0f
     private set;
