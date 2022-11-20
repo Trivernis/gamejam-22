@@ -50,7 +50,6 @@ class TimeMap(fileName: String, val state: GameState) {
         state.map = mapState
         mapStates[fileName] = mapState
         mapRenderer = OrthogonalTiledMapRenderer(map)
-        this.textureLoader.parse()
     }
 
 
@@ -63,6 +62,9 @@ class TimeMap(fileName: String, val state: GameState) {
             val targetMap = teleporter.properties.get("target", String::class.java)
             System.out.println("Teleporting to targetMap $targetMap")
             loadMap("tiled/$targetMap")
+            val mapDescription = mapState.description
+            state.dialogStage.setTexts("You teleported to $mapDescription")
+            state.dialogStage.show()
         }
     }
 
