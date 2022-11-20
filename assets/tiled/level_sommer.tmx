@@ -547,7 +547,7 @@
     <property name="target" value="level_herbst.tmx"/>
    </properties>
   </object>
-  <object id="24" x="1606.06" y="3072.73" width="239.394" height="572.727">
+  <object id="24" x="1670.06" y="3072.73" width="120.727" height="496.727">
    <properties>
     <property name="target" value="level_fruehling.tmx"/>
    </properties>
