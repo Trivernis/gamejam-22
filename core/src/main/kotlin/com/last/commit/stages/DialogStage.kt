@@ -5,19 +5,20 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea
+import com.badlogic.gdx.utils.viewport.ExtendViewport
 
 
 /**
  * Stage for dialog
  */
-class DialogStage(skin: Skin?) : Stage() {
+class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
     private var isVisible = false
     private val texts = com.badlogic.gdx.utils.Array<String>()
     private val area: TextArea
 
     init {
         area = TextArea("#", skin)
-        area.width = Gdx.graphics.width.toFloat()
+        area.width = viewport.worldWidth
         area.height = 100f
         addActor(area)
     }
@@ -38,10 +39,13 @@ class DialogStage(skin: Skin?) : Stage() {
 
     fun resize(width: Int, height: Int) {
         viewport.update(width, height, true)
+        area.width = viewport.worldWidth
+        this.camera.update()
     }
 
     override fun draw() {
         if (isVisible) {
+            this.viewport.apply()
             super.draw()
         }
     }
@@ -72,6 +76,10 @@ class DialogStage(skin: Skin?) : Stage() {
             }
         }
         return true
+    }
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        return keyDown(Input.Keys.SPACE)
     }
 
     private operator fun next() {

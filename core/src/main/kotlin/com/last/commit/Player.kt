@@ -22,10 +22,6 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
         position = Vector2()
     }
 
-    fun addItemToInventory(name: String) {
-        gameState.inventory.add(name)
-    }
-
     fun getX(): Float {
         return position.x
     }
