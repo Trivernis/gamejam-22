@@ -627,7 +627,11 @@
   <properties>
    <property name="item" value="ram"/>
   </properties>
-  <object id="4" x="3010" y="261" width="59" height="54"/>
+  <object id="4" x="3010" y="261" width="59" height="54">
+   <properties>
+    <property name="item" value="drill"/>
+   </properties>
+  </object>
   <object id="5" x="514" y="3006" width="60" height="64">
    <properties>
     <property name="item" value="ram"/>
