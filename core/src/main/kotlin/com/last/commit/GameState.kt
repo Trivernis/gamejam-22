@@ -14,4 +14,5 @@ data class GameState(
     val assetManager: TimeTravelAssetManager,
     var map: MapState? = null,
     val dialogStage: DialogStage
-)
+) {
+}
