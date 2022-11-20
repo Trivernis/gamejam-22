@@ -23,6 +23,7 @@ public class SoundEngine(private val sfx: Float, private val music: Float) {
 
     init {
         backgroundMusic = loadMusic("world_music.mp3")
+        resume()
     }
 
     fun play(gameSound: GameSound, ) {
