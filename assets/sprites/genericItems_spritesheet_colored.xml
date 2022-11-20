@@ -3,7 +3,7 @@
     <SubTexture name="genericItem_color_002.png" x="136" y="1231" width="120" height="110"/>
     <SubTexture name="genericItem_color_003.png" x="130" y="1791" width="89" height="45"/>
     <SubTexture name="genericItem_color_004.png" x="623" y="1826" width="70" height="88"/>
-    <SubTexture name="genericItem_color_005.png" x="626" y="135" width="66" height="105"/>
+    <SubTexture name="screwdriver" x="626" y="135" width="66" height="105"/>
     <SubTexture name="genericItem_color_006.png" x="366" y="1095" width="96" height="84"/>
     <SubTexture name="genericItem_color_007.png" x="628" y="0" width="60" height="95"/>
     <SubTexture name="genericItem_color_008.png" x="623" y="1914" width="68" height="102"/>
@@ -64,12 +64,12 @@
     <SubTexture name="genericItem_color_063.png" x="692" y="590" width="44" height="96"/>
     <SubTexture name="genericItem_color_064.png" x="688" y="1068" width="58" height="110"/>
     <SubTexture name="genericItem_color_065.png" x="688" y="240" width="58" height="88"/>
-    <SubTexture name="genericItem_color_066.png" x="627" y="1075" width="60" height="94"/>
+    <SubTexture name="ipod" x="627" y="1075" width="60" height="94"/>
     <SubTexture name="genericItem_color_067.png" x="625" y="1740" width="66" height="82"/>
     <SubTexture name="genericItem_color_068.png" x="550" y="696" width="82" height="96"/>
     <SubTexture name="genericItem_color_069.png" x="474" y="0" width="84" height="98"/>
     <SubTexture name="genericItem_color_070.png" x="424" y="784" width="24" height="44"/>
-    <SubTexture name="genericItem_color_071.png" x="626" y="358" width="62" height="89"/>
+    <SubTexture name="iphone" x="626" y="358" width="62" height="89"/>
     <SubTexture name="genericItem_color_072.png" x="553" y="1930" width="70" height="92"/>
     <SubTexture name="genericItem_color_073.png" x="688" y="1178" width="58" height="79"/>
     <SubTexture name="genericItem_color_074.png" x="261" y="1095" width="105" height="91"/>
