@@ -18,7 +18,7 @@ class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
 
     init {
         area = TextArea("#", skin)
-        area.width = Gdx.graphics.width.toFloat()
+        area.width = viewport.worldWidth
         area.height = 100f
         addActor(area)
     }
@@ -39,6 +39,7 @@ class DialogStage(skin: Skin?) : Stage(ExtendViewport(512f, 512f)) {
 
     fun resize(width: Int, height: Int) {
         viewport.update(width, height, true)
+        area.width = viewport.worldWidth
         this.camera.update()
     }
 
