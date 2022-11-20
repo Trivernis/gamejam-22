@@ -76,6 +76,10 @@ class DialogStage(skin: Skin?) : Stage() {
         return true
     }
 
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        return keyDown(Input.Keys.SPACE)
+    }
+
     private operator fun next() {
         area.clear()
         area.text = texts.first()
