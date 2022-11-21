@@ -26,8 +26,13 @@ class Collectible(
     override fun interact(otherCollider: Rectangle, state: GameState) {
         println("Interacting with item $name")
         state.soundEngine.play(GameSoundEffect.GRAB)
-        if (state.inventory.add(this.name, state)) {
-            state.map?.collectibles?.remove(this)
+        if (state.inventory.hasItem(this.name)) {
+            state.dialogStage.setTexts("You already have this item.")
+            state.dialogStage.show()
+        } else if (state.inventory.isFull()) {
+            state.dialogStage.setTexts("You can't carry anymore items.")
+        } else {
+            state.inventory.add(this.name)
         }
     }
 
