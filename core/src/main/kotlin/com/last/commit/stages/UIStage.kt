@@ -2,26 +2,19 @@ package com.last.commit.stages
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.utils.viewport.FitViewport
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import com.last.commit.GameState
-import com.last.commit.inventory.InventoryItemTextureLoader
+import com.last.commit.inventory.SpritesheetTextureLoader
 
 class UIStage(path: String, val state: GameState) : Stage(ExtendViewport(512f, 512f)) {
-    val textureLoader = InventoryItemTextureLoader(path)
+    val textureLoader = SpritesheetTextureLoader(path)
     private val labelStyle = Label.LabelStyle(BitmapFont(), Color.BLACK)
     var mapLabel = Label("unknown time", labelStyle)
     var fpsLabel = Label("0", labelStyle)
     private var lastFpsUpdate = 0L
-
-    init {
-        textureLoader.parse()
-    }
 
     fun refresh() {
         super.clear()

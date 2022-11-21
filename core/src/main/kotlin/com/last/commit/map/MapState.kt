@@ -8,10 +8,10 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.Wall
-import com.last.commit.inventory.InventoryItemTextureLoader
+import com.last.commit.inventory.SpritesheetTextureLoader
 import kotlin.math.round
 
-class MapState(val map: TiledMap, val textureLoader: InventoryItemTextureLoader) {
+class MapState(val map: TiledMap, val textureLoader: SpritesheetTextureLoader) {
     private val CELL_SIZE = 64
 
     val size: Vector2
@@ -101,15 +101,15 @@ class MapState(val map: TiledMap, val textureLoader: InventoryItemTextureLoader)
             for (row in 0 until wallsLayer.height) {
                 val cell = wallsLayer.getCell(column, row) ?: continue
                 val isDoor: Boolean =
-                        cell.getTile().getProperties().get("isDoor", false, Boolean::class.java)
+                    cell.getTile().getProperties().get("isDoor", false, Boolean::class.java)
 
                 val wallCollider =
-                        Rectangle(
-                                column.toFloat() * wallsLayer.tileWidth,
-                                row.toFloat() * wallsLayer.tileHeight,
-                                wallsLayer.tileWidth.toFloat(),
-                                wallsLayer.tileHeight.toFloat()
-                        )
+                    Rectangle(
+                        column.toFloat() * wallsLayer.tileWidth,
+                        row.toFloat() * wallsLayer.tileHeight,
+                        wallsLayer.tileWidth.toFloat(),
+                        wallsLayer.tileHeight.toFloat()
+                    )
                 if (java.lang.Boolean.TRUE == isDoor) {
                     doors.add(Door(column, row, wallCollider, cell))
                 } else {

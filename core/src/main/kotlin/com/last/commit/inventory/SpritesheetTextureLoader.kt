@@ -7,42 +7,42 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.XmlReader
 
-class InventoryItemTextureLoader(path: String) {
+/**
+ * Parses textures from a png file with the corresponding xml mapping file
+ */
+class SpritesheetTextureLoader(path: String) {
 
     private val itemsSpriteSheet: Texture
     private val textureMapping: FileHandle
-    private lateinit var subTextures: Array<XmlReader.Element>
+    private val subTextures = Array<XmlReader.Element>()
     private val textures: HashMap<String, TextureRegion> = HashMap()
-    private var initialized: Boolean = false
 
     init {
+        println("Loading textures from $path")
         itemsSpriteSheet = Texture("${path}.png")
         textureMapping = Gdx.files.local("${path}.xml")
+        parse()
+        println("Loaded ${subTextures.size} textures")
     }
 
     fun getTexture(itemName: String): TextureRegion {
-        if (!initialized) {
-            this.parse()
-        }
-        var itemTexture = textures.get(itemName)
+        var itemTexture = textures[itemName]
 
         if (itemTexture == null) {
-            var subtexture = subTextures.first { it.getAttribute("name") == itemName }
-            val x = subtexture.getIntAttribute("x")
-            val y = subtexture.getIntAttribute("y")
-            val width = subtexture.getIntAttribute("width")
-            val height = subtexture.getIntAttribute("height")
+            val subTexture = subTextures.first { it.getAttribute("name") == itemName }
+            val x = subTexture.getIntAttribute("x")
+            val y = subTexture.getIntAttribute("y")
+            val width = subTexture.getIntAttribute("width")
+            val height = subTexture.getIntAttribute("height")
             itemTexture = TextureRegion(itemsSpriteSheet, x, y, width, height)
-            this.textures.set(itemName, itemTexture)
+            this.textures[itemName] = itemTexture
         }
         return itemTexture
     }
 
-    fun parse() {
+    private fun parse() {
         val xml = XmlReader()
         val textureAtlasElement = xml.parse(textureMapping)
-        this.subTextures = textureAtlasElement.getChildrenByName("SubTexture")
-        println("Found ${subTextures.size} textures")
-        this.initialized = true
+        this.subTextures.addAll(textureAtlasElement.getChildrenByName("SubTexture"))
     }
 }

@@ -13,12 +13,12 @@ import com.last.commit.Collidable
 import com.last.commit.GameState
 import com.last.commit.Player
 import com.last.commit.audio.GameSoundEffect
-import com.last.commit.inventory.InventoryItemTextureLoader
+import com.last.commit.inventory.SpritesheetTextureLoader
 
 
 class TimeMap(fileName: String, val state: GameState) {
     private val CELL_SIZE = 64
-    val textureLoader = InventoryItemTextureLoader("sprites/genericItems_spritesheet_colored")
+    val textureLoader = SpritesheetTextureLoader("sprites/genericItems_spritesheet_colored")
 
     val mapLoader: TmxMapLoader = TmxMapLoader()
     var mapRenderer: OrthogonalTiledMapRenderer
