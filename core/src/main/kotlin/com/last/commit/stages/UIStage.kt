@@ -66,4 +66,6 @@ class UIStage(path: String, val state: GameState) : Stage(ExtendViewport(512f, 5
             addActor(mapLabel)
         }
     }
+
+
 }

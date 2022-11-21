@@ -2,11 +2,10 @@ package com.last.commit
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.last.commit.audio.SoundEngine
-import com.last.commit.config.GameSettings
-import com.last.commit.config.TimeTravelAssetManager
 import com.last.commit.inventory.Inventory
 import com.last.commit.screen.*
 import com.last.commit.stages.DialogStage
@@ -17,25 +16,23 @@ class Game : Game() {
 
     lateinit var state: GameState
 
-    lateinit var menu: TimeTravelScreen
-    lateinit var gameplay: TimeTravelScreen
-    lateinit var settings: TimeTravelScreen
-    val inputProcessors = InputMultiplexer()
-    lateinit var inputProcessor: GameInputProcessor
+    lateinit var loading: Screen
+    lateinit var menu: Screen
+    lateinit var gameplay: Screen
+    lateinit var settings: Screen
+
+    lateinit var font: BitmapFont
 
     override fun create() {
+        font = BitmapFont()
         createState()
         createScreens()
-        inputProcessor = GameInputProcessor(this)
-        gameplay.getInputProcessors().forEach { it -> inputProcessors.addProcessor(it) }
-        inputProcessors.addProcessor(inputProcessor)
-        Gdx.input.inputProcessor = inputProcessors
 
-        changeScreen(Screens.MAIN_MENU)
+        changeScreen(Screens.LOADING)
     }
 
     private fun createScreens() {
-
+        loading = LoadingScreen(TimeTravelAssetManager, this)
         menu = MainMenu(this)
         gameplay = FirstScreen(this)
         settings = Settings(this)
@@ -44,22 +41,17 @@ class Game : Game() {
     fun changeScreen(screen: Screens) {
         println("changing screen to $screen")
         when (screen) {
+            Screens.LOADING -> setScreen(loading)
             Screens.MAIN_MENU -> setScreen(menu)
             Screens.SETTINGS -> setScreen(settings)
             Screens.GAME -> setScreen(gameplay)
         }
-        inputProcessor.activeScreen = getScreen() as TimeTravelScreen
     }
 
     fun createState() {
-        val settings =  GameSettings()
-        val soundEngine = SoundEngine(settings.sfxVolume, settings.musicVolume)
-        settings.soundEngin = soundEngine
         state = GameState(
             Inventory(),
-            settings,
-            soundEngine,
-            TimeTravelAssetManager(),
+            SoundEngine,
             null,
             DialogStage(Skin(Gdx.files.internal("ui/uiskin.json")))
         )

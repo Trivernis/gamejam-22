@@ -7,8 +7,8 @@ class Inventory() {
     private val requiredItems = listOf("ram", "iphone", "ipod", "screwdriver")
 
     /**
-     * @param name the name of the subtexture loaded from xml
-     * @return wether the item was added
+     * @param name the name of the subTexture loaded from xml
+     * @return whether the item was added
      */
     fun add(name: String) {
         items.add(InventoryItem(name))
@@ -16,7 +16,7 @@ class Inventory() {
     }
 
     fun hasItem(name: String): Boolean {
-        return this.items.find { it.name == name } == null
+        return this.items.find { it.name == name } != null
     }
 
     fun isFull(): Boolean {
@@ -24,7 +24,7 @@ class Inventory() {
     }
 
     fun remove(name: String) {
-        items.removeIf() { item -> item.name == name }
+        items.removeIf { item -> item.name == name }
     }
 
     fun checkVictoryCondition(): Boolean {

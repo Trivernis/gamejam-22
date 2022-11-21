@@ -1,75 +1,80 @@
 package com.last.commit.audio
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
+import com.last.commit.TimeTravelAssetManager
 
-public class SoundEngine(private val sfx: Float, private val music: Float) {
+object SoundEngine {
 
-
-    var volumeSfx = sfx
-    var volumeMusic = music
+    var sfxVolume = 1.0f
+    var musicVolume = 1.0f
         set(newValue) {
             field = newValue
             resume()
         }
 
-    private val sounds: ThreadLocal<HashMap<String, Sound>> =
-        ThreadLocal.withInitial() { HashMap() }
-    private val musicTracks: ThreadLocal<HashMap<String, Music>> =
-        ThreadLocal.withInitial() { HashMap() }
+    fun play(gameSound: String) {
+        when (gameSound) {
+            "STEPS_INDOOR" -> {
+                val soundName = listOf(
+                    "steps/steps_indoor_1.mp3",
+                    "steps/steps_indoor_2.mp3",
+                    "steps/steps_indoor_3.mp3",
+                ).random()
+                val sound = loadEffect(soundName)
+                sound.play(sfxVolume)
+            }
 
-    var backgroundMusic: Music
+            "DOOR_OPEN" -> {
+                val sound = loadEffect("door_open.mp3")
+                sound.play(sfxVolume)
+            }
 
-    init {
-        backgroundMusic = loadMusic("world_music.mp3")
-        resume()
-    }
+            "DOOR_CLOSE" -> {
+                val sound = loadEffect("door_close.mp3")
+                sound.play(sfxVolume)
+            }
 
-    fun play(gameSound: GameSound, ) {
-        if (gameSound is GameSoundEffect) {
-            val sound = loadEffect(gameSound.name)
-            sound.play(volumeSfx)
-        } else if (gameSound is GameMusic) {
-            backgroundMusic.setLooping(true)
-            resume()
+            "TIME_TRAVEL" -> {
+                val sound = loadEffect("time_travel.mp3")
+                sound.play(sfxVolume)
+            }
+
+            "GRAB" -> {
+                val sound = loadEffect("grab.mp3")
+                sound.play(sfxVolume)
+            }
+
+            "BACKGROUND_MUSIC" -> {
+                loadMusic("world_music.mp3").play()
+            }
+
+            else -> {
+                println("Could not find sound/music $gameSound")
+            }
         }
     }
 
     fun stop() {
-        backgroundMusic.pause()
+        loadMusic("world_music.mp3").pause()
     }
 
     fun resume() {
-        backgroundMusic.volume = volumeMusic
-        if (!backgroundMusic.isPlaying) {
-            backgroundMusic.play()
+        loadMusic("world_music.mp3").volume = musicVolume
+        if (!loadMusic("world_music.mp3").isPlaying) {
+            loadMusic("world_music.mp3").play()
         }
     }
+
     private fun loadEffect(name: String): Sound {
         return loadSound("effects/$name")
     }
 
     private fun loadMusic(name: String): Music {
-        var music = musicTracks.get().get(name)
-
-        if (music == null) {
-            println("Loading sound $name")
-            music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music/$name"))
-            musicTracks.get()[name] = music
-        }
-        return music!!
+        return TimeTravelAssetManager.get("sounds/music/$name")
     }
 
     private fun loadSound(name: String): Sound {
-        var sound = sounds.get().get(name)
-
-        if (sound == null) {
-            println("Loading sound $name")
-            sound = Gdx.audio.newSound(Gdx.files.internal("sounds/$name"))
-            sounds.get()[name] = sound
-        }
-
-        return sound!!
+        return TimeTravelAssetManager.get("sounds/$name")
     }
 }

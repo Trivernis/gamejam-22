@@ -4,8 +4,6 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.GameState
-import com.last.commit.audio.GameSoundEffect
-import com.last.commit.inventory.InventoryItem
 
 class Collectible(
     name: String,
@@ -23,9 +21,9 @@ class Collectible(
         this.collider = Rectangle(pos.x, pos.y, size.x, size.y)
     }
 
-    override fun interact(otherCollider: Rectangle, state: GameState) {
+    override fun interact(otherCollider: Rectangle, state: GameState): Boolean {
         println("Interacting with item $name")
-        state.soundEngine.play(GameSoundEffect.GRAB)
+        state.soundEngine.play("GRAB")
         if (state.inventory.hasItem(this.name)) {
             state.dialogStage.setTexts("You already have this item.")
             state.dialogStage.show()
@@ -33,18 +31,16 @@ class Collectible(
             state.dialogStage.setTexts("You can't carry anymore items.")
         } else {
             state.inventory.add(this.name)
+            return true
         }
+        return false
     }
 
     override fun canInteract(state: GameState): Boolean {
         if (requiredItem == "") {
             return true
         }
-        val item: InventoryItem? = state.inventory.items.find { it.name == requiredItem }
-
-        if (item == null) {
-            return false
-        }
+        state.inventory.items.find { it.name == requiredItem } ?: return false
 
         return true
 

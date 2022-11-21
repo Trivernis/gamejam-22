@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.Collidable
 import com.last.commit.GameState
 import com.last.commit.Player
-import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.SpritesheetTextureLoader
 
 
@@ -58,7 +57,7 @@ class TimeMap(fileName: String, val state: GameState) {
             it.rectangle.contains(player.getX(), player.getY())
         }
         if (teleporter != null) {
-            state.soundEngine.play(GameSoundEffect.TIME_TRAVEL)
+            state.soundEngine.play("TIME_TRAVEL")
             val targetMap = teleporter.properties.get("target", String::class.java)
             System.out.println("Teleporting to targetMap $targetMap")
             loadMap("tiled/$targetMap")
@@ -125,7 +124,10 @@ class TimeMap(fileName: String, val state: GameState) {
 
         if (interactable.canInteract(state)) {
             println("Interacting with element at $gridX:$gridY")
-            interactable.interact(blockingCollider, state)
+            val collected = interactable.interact(blockingCollider, state)
+            if (collected && interactable is Collectible) {
+                state.map?.collectibles?.remove(interactable)
+            }
         } else {
             println("Cannot interact with $gridX:$gridY")
         }

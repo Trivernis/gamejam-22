@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
-import com.last.commit.audio.GameSoundEffect
 
 
 class Player(private val textureRegion: TextureRegion, private val gameState: GameState) : Collidable {
@@ -36,7 +35,7 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
             updateCollider()
 
             if (System.currentTimeMillis() - lastStep > 500) {
-                gameState.soundEngine.play(GameSoundEffect.STEPS_INDOOR) //0.5F
+                gameState.soundEngine.play("STEPS_INDOOR") //0.5F
                 lastStep = System.currentTimeMillis()
             }
         }

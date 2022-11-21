@@ -1,7 +1,7 @@
 package com.last.commit.screen
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -13,66 +13,39 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.last.commit.ColorState
 import com.last.commit.Game
-import com.last.commit.config.ActionCommand
+import com.last.commit.TimeTravelAssetManager
+import com.last.commit.audio.SoundEngine
 
 
-class MainMenu(val parent: Game) : TimeTravelScreen() {
+class MainMenu(val parent: Game) : Screen {
 
-    var stage: Stage
-    var table = Table()
-    val uiSkin: Skin
+    var stage = Stage(ScreenViewport())
+
+    lateinit var uiSkin: Skin
 
     val state = ColorState()
-    init {
-
-        parent.state.assetManager.finishLoading()
-        stage = Stage(ScreenViewport())
-        uiSkin = parent.state.assetManager.getUiTexture()
-    }
-
-    override fun handleKeyInput(action: ActionCommand) {
-        parent.changeScreen(Screens.GAME)
-    }
-
-    override fun handleMouseInput(screenX: Int, screenY: Int, pointer: Int, button: Int) {
-        stage.touchDown(screenX, screenY, pointer, button)
-        stage.touchUp(screenX, screenY, pointer, button)
-    }
-
-    override fun getInputProcessors(): Array<InputProcessor> {
-        return emptyArray()
-    }
 
     override fun show() {
+        Gdx.input.setInputProcessor(stage);
+        SoundEngine.resume()
+        uiSkin = TimeTravelAssetManager.getSkin()
+        stage.clear()
+
+        //add buttons to table
+        createTable();
+    }
+
+    fun createTable(): Table {
+        var table = Table()
+        table.setFillParent(true);
+        table.setDebug(true)
 
         stage.addActor(table);
 
-
-        val y = stage.viewport.screenHeight.toFloat() / 6
-        val x = stage.viewport.screenWidth.toFloat() / 4
-
-        println("x: $x, y: $y")
-
-        //add buttons to table
-        renderTable(x, y);
-    }
-
-    fun renderTable(x: Float, y: Float) {
-        table.reset()
-        table.setFillParent(true);
-
         val newGame = TextButton("Play Game", uiSkin)
-        val preferences = TextButton("Settings", uiSkin)
-        preferences.setSize(stage.viewport.screenWidth.toFloat(), stage.viewport.screenHeight.toFloat())
-        val exit = TextButton("Exit", uiSkin)
 
-        table.row().size(x, y);
-        table.add(newGame).fillX().uniformX()
-        table.row().pad(10F, 0F, 10F, 0F)
-        table.row().size(x, y);
-        table.add(preferences).fillX().uniformX()
-        table.row().size(x, y);
-        table.add(exit).fillX().uniformX()
+        val preferences = TextButton("Settings", uiSkin)
+        val exit = TextButton("Exit", uiSkin)
 
         exit.addListener(object : ChangeListener() {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -92,6 +65,13 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
             }
         })
 
+        table.add(newGame).fillX().uniformX()
+        table.row().pad(10F, 0F, 10F, 0F)
+        table.add(preferences).fill().uniformX()
+        table.row()
+        table.add(exit).fillX().uniformX()
+
+        return table
 
     }
 
@@ -101,9 +81,9 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
         // Draw your screen here. "delta" is the time since last render in seconds.
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        var red = MathUtils.clamp(state.red,0.1F, 0.5F)
-        var blue = MathUtils.clamp(state.green,0.1F, 0.5F)
-        var green = MathUtils.clamp(state.blue,0.1F, 0.5F)
+        var red = MathUtils.clamp(state.red, 0.1F, 0.5F)
+        var blue = MathUtils.clamp(state.green, 0.1F, 0.5F)
+        var green = MathUtils.clamp(state.blue, 0.1F, 0.5F)
 
         Gdx.gl.glClearColor(red, green, blue, 1f)
 
@@ -116,12 +96,6 @@ class MainMenu(val parent: Game) : TimeTravelScreen() {
     override fun resize(width: Int, height: Int) {
         println("width $width, height $height")
         stage.viewport.update(width, height, true);
-
-
-        val y = stage.viewport.screenHeight.toFloat() / 6
-        val x = stage.viewport.screenWidth.toFloat() / 4
-
-        renderTable(x, y)
 
     }
 

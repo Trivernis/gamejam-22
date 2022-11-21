@@ -1,14 +1,13 @@
 package com.last.commit.stages
 
-import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea
+import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.viewport.ExtendViewport
 
-class PromptStage(skin: Skin?): Stage(ExtendViewport(300f, 300f)) {
+class PromptStage(skin: Skin?) : Stage(ExtendViewport(300f, 300f)) {
 
     private val textArea: TextArea;
     var visible = false
@@ -38,15 +37,15 @@ class PromptStage(skin: Skin?): Stage(ExtendViewport(300f, 300f)) {
             super.draw()
         }
     }
-        
+
     fun clearText() {
         this.text.clear()
     }
-    
+
     fun addText(text: String) {
         this.text.add(text)
     }
-    
+
     fun resize(width: Int, height: Int) {
         this.viewport.update(width, height)
         this.camera.update()
@@ -57,7 +56,7 @@ class PromptStage(skin: Skin?): Stage(ExtendViewport(300f, 300f)) {
             false
         } else if (keyCode == Input.Keys.SPACE) {
             next()
-            false
+            true
         } else {
             false
         }

@@ -4,7 +4,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.math.Rectangle
 import com.last.commit.GameState
 import com.last.commit.Wall
-import com.last.commit.audio.GameSoundEffect
 import com.last.commit.inventory.InventoryItem
 
 class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
@@ -24,29 +23,29 @@ class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
             result = requiredItem == item.name
         }
 
-        if (result) {
-        } else {
+        if (!result) {
             state.dialogStage.setTexts("This dor is blocked. You need a key")
             state.dialogStage.show()
         }
         return result
     }
 
-    override fun interact(otherCollider: Rectangle, state: GameState) {
+    override fun interact(otherCollider: Rectangle, state: GameState): Boolean {
         println("interacting with door $this")
         if (isClosed) {
-            state.soundEngine.play(GameSoundEffect.DOOR_OPEN)
+            state.soundEngine.play("DOOR_OPEN")
             isOpen = true
         } else if (isOpen) {
             if (getCollider().overlaps(otherCollider)) {
                 // can't close the door cause it is colliding with given collider
             } else {
-                state.soundEngine.play(GameSoundEffect.DOOR_CLOSE)
+                state.soundEngine.play("DOOR_CLOSE")
                 isOpen = false
             }
         }
 
         println("Door is now open = $isOpen")
+        return false
     }
 
     var isOpen: Boolean
