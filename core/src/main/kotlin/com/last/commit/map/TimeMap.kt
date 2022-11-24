@@ -6,17 +6,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.Collidable
-import com.last.commit.GameState
 import com.last.commit.Player
 import com.last.commit.audio.SoundEngine
 import com.last.commit.inventory.SpritesheetTextureLoader
+import com.last.commit.stages.DialogStage
 
 
-class TimeMap(fileName: String, val state: GameState) {
+class TimeMap(fileName: String, val dialogStage: DialogStage) {
     private val CELL_SIZE = 64
     val textureLoader = SpritesheetTextureLoader("sprites/genericItems_spritesheet_colored")
 
@@ -47,7 +46,6 @@ class TimeMap(fileName: String, val state: GameState) {
     init {
         map = mapLoader.load(fileName)
         mapState = MapState(map, textureLoader)
-        state.map = mapState
         mapStates[fileName] = mapState
         mapRenderer = OrthogonalTiledMapRenderer(map)
     }
@@ -63,8 +61,8 @@ class TimeMap(fileName: String, val state: GameState) {
             System.out.println("Teleporting to targetMap $targetMap")
             loadMap("tiled/$targetMap")
             val mapDescription = mapState.description
-            state.dialogStage.setTexts(4000L, "You teleported to $mapDescription")
-            state.dialogStage.show()
+            dialogStage.setTexts(4000L, "You teleported to $mapDescription")
+            dialogStage.show()
         }
     }
 
@@ -79,7 +77,6 @@ class TimeMap(fileName: String, val state: GameState) {
             mapState = MapState(map, textureLoader)
             mapStates[name] = mapState
         }
-        state.map = mapState
     }
 
     fun getPlayerSpawn(): Vector2 {
@@ -115,7 +112,7 @@ class TimeMap(fileName: String, val state: GameState) {
         return null
     }
 
-    fun interactWith(x: Float, y: Float, blockingCollider: Rectangle) {
+    fun interactWith(x: Float, y: Float, player: Player) {
         val gridX = x.toInt() / CELL_SIZE
         val gridY = y.toInt() / CELL_SIZE
 
@@ -123,13 +120,18 @@ class TimeMap(fileName: String, val state: GameState) {
         val interactable: Interactable = this.findInteractableAtPosition(gridX, gridY) ?: return
         //else continue
 
-        if (interactable.canInteract(state)) {
+        if (player.canInteractWith(interactable)) {
             println("Interacting with element at $gridX:$gridY")
-            val collected = interactable.interact(blockingCollider, state)
-            if (collected && interactable is Collectible) {
-                state.map?.collectibles?.remove(interactable)
+            val interacted = player.interactWith(interactable);
+            if (interacted && interactable is Collectible) {
+                mapState.collectibles.remove(interactable)
+            } else if (!interacted && interactable is Collectible) {
+                dialogStage.setTexts("You cannot use this at the moment.")
+                dialogStage.show()
             }
         } else {
+            dialogStage.setTexts("You cannot interact with this now.")
+            dialogStage.show()
             println("Cannot interact with $gridX:$gridY")
         }
     }

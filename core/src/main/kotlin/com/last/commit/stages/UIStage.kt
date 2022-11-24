@@ -6,10 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import com.last.commit.GameState
+import com.last.commit.Player
 import com.last.commit.inventory.SpritesheetTextureLoader
+import com.last.commit.map.TimeMap
 
-class UIStage(path: String, val state: GameState) : Stage(ExtendViewport(512f, 512f)) {
+class UIStage(path: String, val player: Player, val map: TimeMap) : Stage(ExtendViewport(512f, 512f)) {
     val textureLoader = SpritesheetTextureLoader(path)
     private val labelStyle = Label.LabelStyle(BitmapFont(), Color.BLACK)
     var mapLabel = Label("unknown time", labelStyle)
@@ -18,7 +19,7 @@ class UIStage(path: String, val state: GameState) : Stage(ExtendViewport(512f, 5
 
     fun refresh() {
         super.clear()
-        state.inventory.items.forEachIndexed { index, inventoryItem ->
+        player.inventory.items.forEachIndexed { index, inventoryItem ->
             val image = Image(textureLoader.getTexture(inventoryItem.name))
             image.x = index * 32f
             image.width = 32f
@@ -33,9 +34,9 @@ class UIStage(path: String, val state: GameState) : Stage(ExtendViewport(512f, 5
     }
 
     override fun act(delta: Float) {
-        if (state.inventory.updated) {
+        if (player.inventory.updated) {
             this.refresh()
-            state.inventory.updated = false
+            player.inventory.updated = false
         }
         this.addFpsLabel(delta)
         this.addMapDescriptionLabel()
@@ -58,9 +59,9 @@ class UIStage(path: String, val state: GameState) : Stage(ExtendViewport(512f, 5
     }
 
     private fun addMapDescriptionLabel() {
-        if (state.map != null) {
+        if (map.mapState != null) {
             this.actors.removeValue(this.mapLabel, true)
-            this.mapLabel = Label(state.map!!.description, labelStyle)
+            this.mapLabel = Label(map.mapState!!.description, labelStyle)
             mapLabel.x = 0f
             mapLabel.y = this.viewport.worldHeight - mapLabel.height
             addActor(mapLabel)

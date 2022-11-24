@@ -19,14 +19,13 @@ import com.last.commit.Player
 import com.last.commit.config.GameConfig
 import com.last.commit.map.Interactable
 import com.last.commit.map.TimeMap
+import com.last.commit.stages.DialogStage
 import com.last.commit.stages.PromptStage
 import com.last.commit.stages.UIStage
 import kotlin.math.floor
 
 /** First screen of the application. Displayed after the application is created. */
 class FirstScreen(private val parent: Game) : Screen, InputProcessor {
-
-    val gameState = parent.state
 
     val viewportSize = 1200f
 
@@ -39,30 +38,28 @@ class FirstScreen(private val parent: Game) : Screen, InputProcessor {
     lateinit var map: TimeMap
 
     val playerTexture = Texture("sprites/characters.png")
-    val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43), gameState)
+    val player = Player(TextureRegion(playerTexture, 300, 44, 35, 43))
     var shapeRenderer = ShapeRenderer()
 
     val highlightColor = Color(0f, 0f, 1f, 0.5f)
 
     lateinit var uiStage: UIStage
     lateinit var promptStage: PromptStage
+    lateinit var dialogStage: DialogStage
 
     val inputProcessors = InputMultiplexer()
-
-    init {
-
-    }
 
 
     override fun show() {
         val gameConfig = this.loadGameConfig()
         val randomMap = gameConfig.getRandomMap()
-        map = TimeMap(randomMap, gameState)
+        dialogStage = DialogStage(Skin(Gdx.files.internal("ui/uiskin.json")))
+        map = TimeMap(randomMap, dialogStage)
 
         this.spawnPlayer()
         this.updateCamera()
 
-        uiStage = UIStage("sprites/genericItems_spritesheet_colored", gameState)
+        uiStage = UIStage("sprites/genericItems_spritesheet_colored", player, map)
         shapeRenderer.setAutoShapeType(true)
 
         promptStage = PromptStage(Skin(Gdx.files.internal("ui/uiskin.json")))
@@ -107,7 +104,7 @@ class FirstScreen(private val parent: Game) : Screen, InputProcessor {
         viewport.apply()
 
         resume()
-        inputProcessors.addProcessor(gameState.dialogStage)
+        inputProcessors.addProcessor(dialogStage)
         inputProcessors.addProcessor(promptStage)
         inputProcessors.addProcessor(this)
         Gdx.input.inputProcessor = inputProcessors
@@ -122,9 +119,9 @@ class FirstScreen(private val parent: Game) : Screen, InputProcessor {
 
     override fun render(delta: Float) {
         uiStage.act(delta)
-        gameState.dialogStage.act(delta)
+        dialogStage.act(delta)
         promptStage.act(delta)
-        if (gameState.inventory.checkVictoryCondition()) {
+        if (player.inventory.checkVictoryCondition()) {
             promptStage.visible = true
             promptStage.clearText()
             promptStage.addText("You won!")
@@ -153,7 +150,7 @@ class FirstScreen(private val parent: Game) : Screen, InputProcessor {
         }
         promptStage.draw()
         uiStage.draw()
-        gameState.dialogStage.draw()
+        dialogStage.draw()
     }
 
     fun renderInteractables(interactables: List<Interactable>) {
@@ -262,7 +259,7 @@ class FirstScreen(private val parent: Game) : Screen, InputProcessor {
         // Resize your screen here. The parameters represent the new window size.
         uiStage.resize(width, height)
         promptStage.resize(width, height)
-        gameState.dialogStage.resize(width, height)
+        dialogStage.resize(width, height)
         viewport.update(width, height)
         viewport.apply()
         camera.update()
@@ -292,7 +289,7 @@ class FirstScreen(private val parent: Game) : Screen, InputProcessor {
 
     fun openDoor() {
         val playerDirection: Vector2 = player.getAbsoluteDirection()
-        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
+        map.interactWith(playerDirection.x, playerDirection.y, player)
     }
 
     fun toWorldCoordinates(x: Float, y: Float): Vector2 {
@@ -333,7 +330,7 @@ class FirstScreen(private val parent: Game) : Screen, InputProcessor {
         val mouseCoordinates: Vector2 = toWorldCoordinates(screenX.toFloat(), screenY.toFloat())
         val playerDirection: Vector2 = player.getAbsoluteDirection()
 
-        map.interactWith(playerDirection.x, playerDirection.y, player.getCollider())
+        map.interactWith(playerDirection.x, playerDirection.y, player)
 
         return false
     }

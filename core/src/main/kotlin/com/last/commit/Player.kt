@@ -5,9 +5,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.last.commit.audio.SoundEngine
+import com.last.commit.inventory.Inventory
+import com.last.commit.inventory.InventoryItem
+import com.last.commit.map.Collectible
+import com.last.commit.map.Door
+import com.last.commit.map.Interactable
 
 
-class Player(private val textureRegion: TextureRegion, private val gameState: GameState) : Collidable {
+class Player(private val textureRegion: TextureRegion) : Collidable {
 
     private var collider: Rectangle = Rectangle(0f, 0f, 0f, 0f)
     var position: Vector2 = Vector2.Zero
@@ -16,10 +21,13 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
     private val interactionRange = 60f
     private var lastStep = 0L
 
+    val inventory: Inventory;
+
     init {
         val size = Math.max(textureRegion.regionWidth, textureRegion.regionHeight).toFloat()
         collider = Rectangle(0f, 0f, size, size)
         position = Vector2()
+        inventory = Inventory()
     }
 
     fun getX(): Float {
@@ -124,5 +132,49 @@ class Player(private val textureRegion: TextureRegion, private val gameState: Ga
             getHeight(), 1f, 1f,
             getRotation()
         )
+    }
+
+    fun canInteractWith(interactable: Interactable): Boolean {
+        if (interactable is Door) {
+            val requiredItem: String =
+                interactable.cell.getTile().getProperties().get("requiredItem", "", String::class.java)
+            val item: InventoryItem? = inventory.items.find { it.name == requiredItem }
+
+            val result: Boolean
+            if (item == null) {
+                result = requiredItem == ""
+            } else {
+                result = requiredItem == item.name
+            }
+            return result
+        } else if (interactable is Collectible) {
+            if (interactable.requiredItem == "") {
+                return true
+            }
+            inventory.items.find { it.name == interactable.requiredItem } ?: return false
+
+            return true
+        }
+
+        return false;
+    }
+
+    fun interactWith(interactable: Interactable): Boolean {
+        if (interactable is Door) {
+            //check Collision
+            if (getCollider().overlaps(interactable.getCollider())) {
+                return false;
+            }
+            interactable.interact()
+        } else if (interactable is Collectible) {
+            if (inventory.hasItem(interactable.name) || inventory.isFull()) {
+                return false
+            } else {
+                inventory.add(interactable.name)
+                return true
+            }
+        }
+
+        return false
     }
 }
