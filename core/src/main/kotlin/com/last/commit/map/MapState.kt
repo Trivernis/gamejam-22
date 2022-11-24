@@ -43,11 +43,12 @@ class MapState(val map: TiledMap, val textureLoader: SpritesheetTextureLoader) {
         for (obj in map.layers["Teleporter"].objects) {
             if (obj is RectangleMapObject) {
                 this.teleporters.add(obj)
-                println("Teleporter ${obj}")
             }
         }
         if (this.teleporters.isEmpty()) {
             println("No Teleporters defined!")
+        } else {
+            println("Found ${teleporters.size} teleporters")
         }
     }
 

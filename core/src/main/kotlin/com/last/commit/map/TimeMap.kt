@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.last.commit.Collidable
 import com.last.commit.GameState
 import com.last.commit.Player
+import com.last.commit.audio.SoundEngine
 import com.last.commit.inventory.SpritesheetTextureLoader
 
 
@@ -57,7 +58,7 @@ class TimeMap(fileName: String, val state: GameState) {
             it.rectangle.contains(player.getX(), player.getY())
         }
         if (teleporter != null) {
-            state.soundEngine.play("TIME_TRAVEL")
+            SoundEngine.play("TIME_TRAVEL")
             val targetMap = teleporter.properties.get("target", String::class.java)
             System.out.println("Teleporting to targetMap $targetMap")
             loadMap("tiled/$targetMap")

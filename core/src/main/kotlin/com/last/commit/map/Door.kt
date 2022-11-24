@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell
 import com.badlogic.gdx.math.Rectangle
 import com.last.commit.GameState
 import com.last.commit.Wall
+import com.last.commit.audio.SoundEngine
 import com.last.commit.inventory.InventoryItem
 
 class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
@@ -33,13 +34,13 @@ class Door(gridX: Int, gridY: Int, wallCollider: Rectangle, cell: Cell) :
     override fun interact(otherCollider: Rectangle, state: GameState): Boolean {
         println("interacting with door $this")
         if (isClosed) {
-            state.soundEngine.play("DOOR_OPEN")
+            SoundEngine.play("DOOR_OPEN")
             isOpen = true
         } else if (isOpen) {
             if (getCollider().overlaps(otherCollider)) {
                 // can't close the door cause it is colliding with given collider
             } else {
-                state.soundEngine.play("DOOR_CLOSE")
+                SoundEngine.play("DOOR_CLOSE")
                 isOpen = false
             }
         }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.last.commit.audio.SoundEngine
 import com.last.commit.inventory.Inventory
 import com.last.commit.screen.*
 import com.last.commit.stages.DialogStage
@@ -51,7 +50,6 @@ class Game : Game() {
     fun createState() {
         state = GameState(
             Inventory(),
-            SoundEngine,
             null,
             DialogStage(Skin(Gdx.files.internal("ui/uiskin.json")))
         )
