@@ -99,7 +99,7 @@ function moveTilesFromLayerToTarget(region, fromLayer, targetLayer) {
 let moveTilesOneLayerDown = tiled.registerAction("MoveTilesOneLayerDown", function(/* action */) {
 	const map = tiled.activeAsset;
 	if (!map.isTileMap) {
-		tiled.alert("Not a tile map!");
+		tiled.alert("Not a tile map.");
 		return;
 	}
 	
@@ -108,11 +108,14 @@ let moveTilesOneLayerDown = tiled.registerAction("MoveTilesOneLayerDown", functi
 		tiled.log(`Id: ${layer.id} - name: ${layer.name}`);
 	}
 	if(map.selectedLayers.length > 1) {
-		tiled.alert("Only one selected layer allowed");
+		tiled.alert("Only one selected layer allowed.");
 		
 		return;
 	}
 	const selectedLayer = map.selectedLayers[0];
+	if(!selectedLayer.isTileLayer) {
+	    tiled.alert("You need to select a tiled layer.")
+	}
 	tiled.log("Selected layer: " + selectedLayer.name);
 	const previousLayer = getPreviousTiledLayer(selectedLayer.id)
 	tiled.log("Prev layer is: " + previousLayer.name)
